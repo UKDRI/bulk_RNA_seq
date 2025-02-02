@@ -6,6 +6,7 @@ Snakemake pipeline processing fastq files to the DESeq2, and GO annotations
 - **FastQ Quality Control** (`FastQC`, `MultiQC`)
 - **Adapter Trimming** (`Atria`)
 - **Read Alignment** (`STAR`)
+- **Read Alignment QC** (`MultiQC`)
 - **Transcript Quantification** (`Salmon`)
 - **Quality Control Metrics** (`RSeQC`, `samtools`)
 - **Differential Expression Analysis** (`DESeq2`)
