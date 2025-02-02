@@ -1,0 +1,9 @@
+name: align_env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - star
+  - zlib      # Required for zcat
+  - coreutils # Provides utilities like mkdir

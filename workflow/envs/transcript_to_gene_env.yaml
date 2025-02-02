@@ -1,0 +1,12 @@
+name: transcript_to_gene_env
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.8
+  - pandas
+  - r-base=4.1
+  - bioconductor-rtracklayer
+  - r-dplyr
+  - r-biocmanager

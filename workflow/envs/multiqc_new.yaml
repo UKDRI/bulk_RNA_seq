@@ -1,0 +1,18 @@
+name: multiqc_new
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - multiqc=1.27
+  - pillow=10.2.0
+  - libtiff=4.6.0
+  - libdeflate=1.21
+  - matplotlib
+  - pandas
+  - seaborn
+  - numpy
+  - certifi
+  - requests
+  - click

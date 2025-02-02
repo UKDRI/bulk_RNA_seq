@@ -1,0 +1,9 @@
+V1,sample_id,group,replicate,fastq_1,fastq_2,strandedness
+1,SRR3192657,GM12878,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603629_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603629_T1_2.fastq.gz,reverse
+2,SRR3192658,GM12878,2,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603630_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603630_T1_2.fastq.gz,reverse
+3,SRR3192408,K562,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603392_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603392_T1_2.fastq.gz,reverse
+4,SRR3192409,K562,2,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603393_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603393_T1_2.fastq.gz,reverse
+5,SRR5048099,MCF7,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370490_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370490_T1_2.fastq.gz,reverse
+6,SRR5048100,MCF7,2,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370491_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370491_T1_2.fastq.gz,reverse
+7,SRR5048077,H1,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370468_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370468_T1_2.fastq.gz,reverse
+8,SRR5048078,H1,2,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370469_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX2370469_T1_2.fastq.gz,reverse

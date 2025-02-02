@@ -1,0 +1,9 @@
+name: quant-env
+channels:
+  - bioconda
+  - conda-forge
+  - defaults
+dependencies:
+  - salmon  # Specify version compatible with -i option
+  - python=3.8
+  - pandas
