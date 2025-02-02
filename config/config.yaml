@@ -1,5 +1,5 @@
 # Path to the sample sheet CSV containing metadata
-sample_sheet: "test-data/samplesheet_full_CM.csv"   # Path to your samplesheet
+sample_sheet: "test-data/samplesheet_full.csv"   # Path to your samplesheet
 
 # Column names in the sample sheet for metadata
 group_column: "group"                # Column for group information
@@ -7,11 +7,7 @@ replicate_column: "replicate"        # Column for replicate information
 fastq_1_column: "fastq_1"            # Column for first FASTQ file URL
 fastq_2_column: "fastq_2"            # Column for second FASTQ file URL
 strandedness_column: "strandedness"  # Column for strandedness information
-
-# Paths for output directories
-fastq_dir: "../SoyonHong/Christina Maat/Data/01_raw_data/bulkRNAseq/Novogene/contract_no_H204SC23081141/Files_Novogene/Data/"         # Directory where the converted .fastq.gz files will be stored
-qc_dir: "test-data/qc"               # Directory where quality control results will be stored
-
+   # Directory where quality control results will be stored
 # Number of threads to use for parallel processes
 threads: 20
 
@@ -30,11 +26,3 @@ genome:
     star_index: "test-data/genome/mouse/star_index_genome"
     salmon_index: "test-data/genome/mouse/salmon_index_genome"
 
-# config.yaml
-data_paths:
-  raw_data: "../dataset_CM/raw/"
-  trimmed_data: "../dataset_CM/trimmed/"
-
-
-# Quantification method: specify either 'salmon' or 'kallisto'
-quant_method: "salmon"

@@ -1,7 +1,7 @@
 # Rule to download the latest human transcriptome (cDNA) from Ensembl
 rule download_human_genome:
     output:
-        "data/genome/human/human_genome.fa.gz"
+        "data/genome/hg38/hg38_genome.fa.gz"
     shell:
         """
         # Create directory if it doesn't exist
@@ -14,7 +14,7 @@ rule download_human_genome:
 
 rule download_human_transcriptome:
     output:
-        "data/genome/human/human_transcriptome.fa.gz"
+        "data/genome/hg38/hg38_transcriptome.fa.gz"
     shell:
         """
         # Create directory if it doesn't exist
@@ -27,7 +27,7 @@ rule download_human_transcriptome:
 # Rule to download the human GTF annotation file (GRCh38) from Ensembl
 rule download_human_annotation:
     output:
-        "data/genome/human/human_annotation.gtf.gz"
+        "data/genome/hg38/hg38_annotation.gtf.gz"
     shell:
         """
         # Create directory if it doesn't exist
@@ -40,9 +40,9 @@ rule download_human_annotation:
 # Rule to unzip the human genome FASTA file
 rule unzip_human_genome:
     input:
-        "data/genome/human/human_genome.fa.gz"
+        "data/genome/hg38/hg38_genome.fa.gz"
     output:
-        "data/genome/human/human_genome.fa"
+        "data/genome/hg38/hg38_genome.fa"
     shell:
         """
         # Unzip the transcriptome FASTA file
@@ -52,9 +52,9 @@ rule unzip_human_genome:
 # Rule to unzip the human transcriptome FASTA file
 rule unzip_human_transcriptome:
     input:
-        "data/genome/human/human_transcriptome.fa.gz"
+        "data/genome/hg38/hg38_transcriptome.fa.gz"
     output:
-        "data/genome/human/human_transcriptome.fa"
+        "data/genome/hg38/hg38_transcriptome.fa"
     shell:
         """
         # Unzip the transcriptome FASTA file
@@ -64,9 +64,9 @@ rule unzip_human_transcriptome:
 # Rule to unzip the human annotation file
 rule unzip_human_annotation:
     input:
-        "data/genome/human/human_annotation.gtf.gz"
+        "data/genome/hg38/hg38_annotation.gtf.gz"
     output:
-        "data/genome/human/human_annotation.gtf"
+        "data/genome/hg38/hg38_annotation.gtf"
     shell:
         """
         # Unzip the GTF annotation file
@@ -76,10 +76,10 @@ rule unzip_human_annotation:
 # Rule to build the STAR index for the human transcriptome
 rule build_star_index_genome:
     input:
-        genome_fa="data/genome/human/human_genome.fa",
-        gtf_file="data/genome/human/human_annotation.gtf"
+        genome_fa="data/genome/hg38/hg38_genome.fa",
+        gtf_file="data/genome/hg38/hg38_annotation.gtf"
     output:
-        directory("data/genome/human/star_index_genome")
+        directory("data/genome/hg38/star_index_hg38")
     conda:
         "../envs/align.yaml"  # Conda environment for STAR
     threads: 50

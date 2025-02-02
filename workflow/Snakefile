@@ -1,17 +1,26 @@
-import os
 import pandas as pd
+import os
 from snakemake.utils import min_version
 from snakemake.shell import shell
 
 # Set minimum Snakemake version
 min_version("8.8.0")
 
-# Load configuration and samplesheet
+# Load configuration
 configfile: "config/config.yaml"
 
 # Load sample sheet
 samplesheet_df = pd.read_csv(config["sample_sheet"])
 samples = samplesheet_df["sample_id"].tolist()
+
+# Extract genome type (Assume all samples use the same genome)
+genomes = samplesheet_df["genome"].unique().tolist()
+
+if len(genomes) > 1:
+    raise ValueError("Multiple genome types detected! Ensure all samples use the same genome.")
+    
+selected_genome = genomes[0]  # Assume the first genome in the list
+
 
 # Dynamically generate comparisons list from the comparisons file
 comparisons_file = "test-data/comparison.csv"
@@ -21,8 +30,8 @@ comparisons = comparisons_df.apply(lambda row: f"{row['treatment']}_vs_{row['con
 # Define report output
 report: "report/workflow.rst"
 
-# Include modular rules
-include: "rules/download_ref_mm39.smk"
+# Include modular rules dynamically based on genome selection
+include: f"rules/download_ref_{selected_genome}.smk"
 include: "rules/create_rseqc_annotation.smk"
 
 # Quality control and trimming
@@ -40,8 +49,7 @@ include: "rules/index_bam.smk"
 include: "rules/samtools_stats.smk"
 include: "rules/mosdepth.smk"
 include: "rules/multiqc_bam.smk"
-include: "rules/build_salmon_index_mouse.smk"
-include: "rules/build_salmon_index_human.smk"
+include: "rules/build_salmon_index.smk"
 include: "rules/quantify_transcripts_salmon.smk"
 include: "rules/combine_expression_matrix.smk"
 include: "rules/transcript_to_gene_mapping.smk"
@@ -62,68 +70,39 @@ include: "rules/deseq_analysis_comparison.smk"
 # Define the final 'all' rule
 rule all:
     input:
-        # Quantification
         "../test-dataset/data/Quant/Count/combined_expression.csv",
         expand("../test-dataset/data/Quant/Count/quant/{sample}/quant.sf", sample=samples),
-        directory("../test-dataset/data/Differential/deglist/"),
+        "../test-dataset/data/Differential/deglist/",
         "../test-dataset/data/Quant/transcript_to_gene_mapping.csv",
-
-        # Raw FASTQ files
         expand("../test-dataset/data/raw2/{sample}_{suffix}.fq.gz", sample=samples, suffix=["1", "2"]),
-
-        # QC and trimming
         expand("../test-dataset/data/adapters/{sample}_adapters.txt", sample=samples),
         expand("../test-dataset/data/trimmed/{sample}_{suffix}.atria.fq.gz", sample=samples, suffix=["1", "2"]),
         expand("../test-dataset/data/fastqc/trimmed/{sample}_{suffix}.atria_fastqc.html", sample=samples, suffix=["1", "2"]),
         expand("../test-dataset/data/fastqc/raw/{sample}_{suffix}_fastqc.html", sample=samples, suffix=["1", "2"]),
         "../test-dataset/data/multiqc/trimmed/multiqc_report.html",
         "../test-dataset/data/multiqc/raw/multiqc_report.html",
-        "../test-dataset/data/multiqc_CM/bam/multiqc_report.html",
-
-        # Aligned BAM files
+        "../test-dataset/data/multiqc/bam/multiqc_report.html",
         expand("../test-dataset/data/aligned/{sample}.bam", sample=samples),
         expand("../test-dataset/data/aligned/{sample}.bam.bai", sample=samples),
-
-        # QC metrics
-        expand("../test-dataset/data/qc_CM/samtools/{sample}_samtools_stats.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/samtools/{sample}_flagstat.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}_infer_experiment.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}_read_distribution.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/samtools/{sample}_bam_stats.txt", sample=samples),
-        "../test-dataset/data/qc_CM/samtools/align_pct.xlsx",
-        "../test-dataset/data/qc_CM/samtools/merged_samtools_stats.xlsx",
-        expand("../test-dataset/data/qc_CM/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
+        expand("../test-dataset/data/qc/samtools/{sample}_samtools_stats.txt", sample=samples),
+        expand("../test-dataset/data/qc/samtools/{sample}_flagstat.txt", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}_infer_experiment.txt", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
         expand("../test-dataset/data/qc/rseqc/{sample}.geneBodyCoverage.txt", sample=samples),
         expand("../test-dataset/data/qc/rseqc/{sample}.geneBodyCoverage.curves.pdf", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.junctionSaturation_plot.pdf", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.DupRate_plot.pdf", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.DupRate_plot.r", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.saturation.pdf", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.saturation.r", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}.eRPKM.xls", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}_read_distribution.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/rseqc/{sample}_bam_stat.txt", sample=samples),
-
-
-        # Splicing and genome content
-       # expand("../test-dataset/data/qc_CM/splicing/{sample}_splicing_metrics.txt", sample=samples),
-        expand("../test-dataset/data/qc_CM/genome_content/{sample}_genome_content.txt", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.junctionSaturation_plot.pdf", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.DupRate_plot.pdf", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.DupRate_plot.r", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.saturation.pdf", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.saturation.r", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}.eRPKM.xls", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
+        expand("../test-dataset/data/qc/rseqc/{sample}_bam_stat.txt", sample=samples),
+        expand("../test-dataset/data/qc/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
         expand("../test-dataset/data/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv", comparison=comparisons),
         expand("../test-dataset/data/enrichment/GO/Molecular_Function/{comparison}_molecular_function_enrichment.csv", comparison=comparisons),
         expand("../test-dataset/data/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv", comparison=comparisons),
-
-
-        # Genome and annotation
-        [
-        #    "data/genome/human/human_annotation.gtf.gz",
-        #    "data/genome/human/human_genome.fa.gz",
-        #    "data/genome/human/salmon/salmon_index_human",
-            "data/genome/mouse/mouse_annotation.gtf.gz",
-            "data/genome/mouse/star_index_genome",
-            "data/genome/mouse/mouse_genome.fa.gz",
-            "data/genome/mouse/salmon/salmon_index_mouse",
-            "data/genome/mouse/mouse.bed",
-        ],
-
-        # Tools and references
+        f"data/genome/{selected_genome}/{selected_genome}_annotation.gtf.gz",
+        f"data/genome/{selected_genome}/{selected_genome}_genome.fa.gz",
+        f"data/genome/{selected_genome}/salmon/salmon_index_{selected_genome}",
         "tools/Atria/atria-4.1.1/bin/atria",

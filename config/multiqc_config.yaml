@@ -1,5 +1,0 @@
-custom_modules:
-  search_paths: ['./workflow/plugins']  # Relative path to the plugins folder
-  enabled: ['genome_content']
-file_limits:
-  max_filesize: 1G

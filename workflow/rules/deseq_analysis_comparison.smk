@@ -1,8 +1,8 @@
 rule deseq2_analysis_multiple:
     input:
         expression="../test-dataset/data/Quant/Count/combined_expression.csv",
-        metadata="test-data/samplesheet_full_CM.csv",
-        comparisons="test-data/comparison_CM.csv"
+        metadata="test-data/samplesheet_full.csv",
+        comparisons="test-data/comparison.csv"
     output:
         deg_results=directory("../test-dataset/data/Differential/deglist/")
     conda:

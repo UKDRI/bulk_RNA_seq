@@ -2,7 +2,7 @@ rule go_enrichment:
     input:
         de_genes="../test-dataset/data/Differential/deglist/{comparison}_deg_results.csv"
     params:
-        organism="org.Mm.eg.db",
+        organism=lambda wildcards: "org.Hs.eg.db" if selected_genome == "hg38" else "org.Mm.eg.db",
         pvalue_cutoff=0.05
     output:
         bp="../test-dataset/data/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv",
@@ -12,12 +12,17 @@ rule go_enrichment:
         "../envs/go_enrichment.yaml"
     shell:
         """
-        mkdir -p $(dirname "{output.bp}")
+        set -e  # Exit immediately if a command fails
+
+        # Ensure output directory exists
+        mkdir -p $(dirname {output.bp})
+
+        # Run GO enrichment analysis using the correct organism database
         Rscript --vanilla workflow/scripts/go_enrichment_analysis.R \
-            -i "{input.de_genes}" \
-            -o_bp "{output.bp}" \
-            -o_mf "{output.mf}" \
-            -o_cc "{output.cc}" \
-            -org "{params.organism}" \
-            -p "{params.pvalue_cutoff}"
+            -i {input.de_genes} \
+            -o_bp {output.bp} \
+            -o_mf {output.mf} \
+            -o_cc {output.cc} \
+            -org {params.organism} \
+            -p {params.pvalue_cutoff} || { echo "GO enrichment analysis failed" >&2; exit 1; }
         """

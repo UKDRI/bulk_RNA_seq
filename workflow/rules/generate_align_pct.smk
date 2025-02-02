@@ -1,8 +1,8 @@
 rule generate_align_pct:
     input:
-        bam_files=expand("../test-dataset/data/aligned_CM/{sample}.bam", sample=samples)
+        bam_files=expand("../test-dataset/data/aligned/{sample}.bam", sample=samples)
     output:
-        align_pct="../test-dataset/data/qc_CM/samtools/align_pct.xlsx"
+        align_pct="../test-dataset/data/qc/samtools/align_pct.xlsx"
     conda:
         "../envs/samtools.yaml"
     threads: 15

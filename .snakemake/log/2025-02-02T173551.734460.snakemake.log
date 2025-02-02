@@ -1,0 +1,9 @@
+host: marsha
+Building DAG of jobs...
+MissingInputException in rule detect_adapters in file /home/umran/Bulk_RNA_seq/workflow/rules/detect_adapters.smk, line 1:
+Missing input files for rule detect_adapters:
+    output: ../test-dataset/data/adapters/SRR3192657_adapters.txt
+    wildcards: sample=SRR3192657
+    affected files:
+        ../test-dataset/data/raw2/SRR3192657_1.fq.gz
+        ../test-dataset/data/raw2/SRR3192657_2.fq.gz

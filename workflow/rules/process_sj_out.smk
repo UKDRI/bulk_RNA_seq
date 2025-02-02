@@ -1,8 +1,8 @@
 rule process_sj_out:
     input:
-        sj_out="../test-dataset/data/aligned_CM/{sample}_SJ.out.tab"
+        sj_out="../test-dataset/data/aligned/{sample}_SJ.out.tab"
     output:
-        splicing_metrics="../test-dataset/data/qc_CM/splicing/{sample}_splicing_metrics.txt"
+        splicing_metrics="../test-dataset/data/qc/splicing/{sample}_splicing_metrics.txt"
     conda:
         "../envs/align.yaml"
     shell:

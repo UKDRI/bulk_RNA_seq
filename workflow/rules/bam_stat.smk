@@ -1,9 +1,9 @@
 # Rule for running RSeQC bam statistics
 rule bam_stat:
     input:
-        bam="../test-dataset/data/aligned_CM/{sample}.bam"
+        bam="../test-dataset/data/aligned/{sample}.bam"
     output:
-        txt="../test-dataset/data/qc_CM/rseqc/{sample}_bam_stat.txt"
+        txt="../test-dataset/data/qc/rseqc/{sample}_bam_stat.txt"
     conda:
         "../envs/rseqc_env.yaml"
     shell:

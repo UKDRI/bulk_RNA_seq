@@ -1,0 +1,7 @@
+host: marsha
+Building DAG of jobs...
+MissingInputException in rule build_salmon_index in file /home/umran/Bulk_RNA_seq/workflow/rules/build_salmon_index.smk, line 1:
+Missing input files for rule build_salmon_index:
+    output: {params.index_dir}
+    affected files:
+        {params.transcriptome}

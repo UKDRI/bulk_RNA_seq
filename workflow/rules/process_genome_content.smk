@@ -1,9 +1,9 @@
 rule process_genome_content:
     input:
-        bam="../test-dataset/data/aligned_CM/{sample}.bam",
-        bai="../test-dataset/data/aligned_CM/{sample}.bam.bai"
+        bam="../test-dataset/data/aligned/{sample}.bam",
+        bai="../test-dataset/data/aligned/{sample}.bam.bai"
     output:
-        genome_content="../test-dataset/data/qc_CM/genome_content/{sample}_genome_content.txt"
+        genome_content="../test-dataset/data/qc/genome_content/{sample}_genome_content.txt"
     conda:
         "../envs/samtools.yaml"
     shell:
