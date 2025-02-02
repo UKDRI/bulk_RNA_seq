@@ -1,9 +1,0 @@
-host: marsha
-Building DAG of jobs...
-MissingInputException in rule salmon_quant_reads in file /home/umran/Bulk_RNA_seq/workflow/rules/quantify_transcripts_salmon.smk, line 1:
-Missing input files for rule salmon_quant_reads:
-    output: ../test-dataset/data/Quant/Count/quant/SRR3192657/quant.sf
-    wildcards: sample=SRR3192657
-    affected files:
-        ../test-dataset/data/trimmed/SRR3192657_2.fq.gz
-        ../test-dataset/data/trimmed/SRR3192657_1.fq.gz
