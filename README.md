@@ -88,3 +88,6 @@ snakemake --use-conda --rerun-triggers mtime --cores 30
 ```
 💡 *Adjust `--cores` based on your system's available CPUs.*
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
