@@ -1,6 +1,6 @@
 rule download_atria:
     output:
-        "tools/Atria/atria-4.1.1/bin/atria"
+        "../results/tools/Atria/atria-4.1.1/bin/atria"
     conda:
         "../envs/trim-env.yaml"  # Correct environment path
     shell:
@@ -46,5 +46,5 @@ rule download_atria:
         fi
         chmod +x atria-4.1.1/bin/atria
 
-        echo "Atria successfully built and installed at tools/Atria/atria-4.1.1/bin/atria"
+        echo "Atria successfully built and installed at ../results/tools/Atria/atria-4.1.1/bin/atria"
         """

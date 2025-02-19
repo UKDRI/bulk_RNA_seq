@@ -1,11 +1,11 @@
 rule read_duplication:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam"
+        bam="../results/aligned/{sample}.bam"
     output:
-        pdf="../test-dataset/data/qc/rseqc/{sample}.DupRate_plot.pdf",
-        r="../test-dataset/data/qc/rseqc/{sample}.DupRate_plot.r",
-        pos_xls="../test-dataset/data/qc/rseqc/{sample}.pos.DupRate.xls",
-        seq_xls="../test-dataset/data/qc/rseqc/{sample}.seq.DupRate.xls"
+        pdf="../results/qc/rseqc/{sample}.DupRate_plot.pdf",
+        r="../results/qc/rseqc/{sample}.DupRate_plot.r",
+        pos_xls="../results/qc/rseqc/{sample}.pos.DupRate.xls",
+        seq_xls="../results/qc/rseqc/{sample}.seq.DupRate.xls"
     conda:
         "../envs/rseqc_env.yaml"
     shell:

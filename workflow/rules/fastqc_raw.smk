@@ -1,12 +1,12 @@
 rule fastqc_raw:
     input:
-        r1="../test-dataset/data/raw2/{sample}_1.fq.gz",
-        r2="../test-dataset/data/raw2/{sample}_2.fq.gz"
+        r1="../rawdata/{sample}_1.fq.gz",
+        r2="../rawdata/{sample}_2.fq.gz"
     output:
-        r1_fastqc_html="../test-dataset/data/fastqc/raw/{sample}_1_fastqc.html",
-        r1_fastqc_zip="../test-dataset/data/fastqc/raw/{sample}_1_fastqc.zip",
-        r2_fastqc_html="../test-dataset/data/fastqc/raw/{sample}_2_fastqc.html",
-        r2_fastqc_zip="../test-dataset/data/fastqc/raw/{sample}_2_fastqc.zip"
+        r1_fastqc_html="../results/fastqc/raw/{sample}_1_fastqc.html",
+        r1_fastqc_zip="../results/fastqc/raw/{sample}_1_fastqc.zip",
+        r2_fastqc_html="../results/fastqc/raw/{sample}_2_fastqc.html",
+        r2_fastqc_zip="../results/fastqc/raw/{sample}_2_fastqc.zip"
     conda:
         "../envs/qc.yaml"
     threads: 20

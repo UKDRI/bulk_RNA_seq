@@ -1,9 +1,9 @@
 rule infer_strand:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam",
-        annotation=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}.bed"
+        bam="../results/aligned/{sample}.bam",
+        annotation=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     output:
-        txt="../test-dataset/data/qc/rseqc/{sample}_infer_experiment.txt"
+        txt="../results/qc/rseqc/{sample}_infer_experiment.txt"
     conda:
         "../envs/rseqc_env.yaml"
     shell:

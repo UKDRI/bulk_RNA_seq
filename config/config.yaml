@@ -1,5 +1,5 @@
 # Path to the sample sheet CSV containing metadata
-sample_sheet: "test-data/samplesheet_full.csv"   # Path to your samplesheet
+sample_sheet: "data/samplesheet_full.csv"   # Path to your samplesheet
 
 # Column names in the sample sheet for metadata
 group_column: "group"                # Column for group information
@@ -14,15 +14,15 @@ threads: 20
 # Genome reference data for different organisms
 genome:
   hg38:
-    genome_fa: "test-data/genome/human/hg38_genome.fa"
-    gtf: "test-data/genome/human/hg38_annotation.gtf"
-    transcriptome: "test-data/genome/human/hg38_transcriptome.fa"
-    star_index: "test-data/genome/human/star_index"
-    salmon_index: "test-data/genome/human/salmon_index"
+    genome_fa: "../results/genome/human/hg38_genome.fa"
+    gtf: "../results/genome/human/hg38_annotation.gtf"
+    transcriptome: "../results/genome/human/hg38_transcriptome.fa"
+    star_index: "../results/genome/human/star_index"
+    salmon_index: "../results/genome/human/salmon_index"
   mm39:
-    genome_fa: "test-data/genome/mouse/mm39_genome.fa"
-    gtf: "test-data/genome/mouse/mm39_annotation.gtf"
-    transcriptome: "test-data/genome/mouse/mm39_transcriptome.fa"
-    star_index: "test-data/genome/mouse/star_index_genome"
-    salmon_index: "test-data/genome/mouse/salmon_index_genome"
+    genome_fa: "../results/genome/mouse/mm39_genome.fa"
+    gtf: "../results/genome/mouse/mm39_annotation.gtf"
+    transcriptome: "../results/genome/mouse/mm39_transcriptome.fa"
+    star_index: "../results/genome/mouse/star_index_genome"
+    salmon_index: "../results/genome/mouse/salmon_index_genome"
 

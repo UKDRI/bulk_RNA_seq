@@ -1,9 +1,9 @@
 rule mosdepth:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam",
-        index="../test-dataset/data/aligned/{sample}.bam.bai"
+        bam="../results/aligned/{sample}.bam",
+        index="../results/aligned/{sample}.bam.bai"
     output:
-        summary="../test-dataset/data/qc/mosdepth/{sample}.mosdepth.summary.txt"
+        summary="../results/qc/mosdepth/{sample}.mosdepth.summary.txt"
     conda:
         "../envs/mosdepth.yaml"
     shell:

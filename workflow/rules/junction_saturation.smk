@@ -1,10 +1,10 @@
 rule junction_saturation:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam",
-        annotation=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}.bed"
+        bam="../results/aligned/{sample}.bam",
+        annotation=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     output:
-        pdf="../test-dataset/data/qc/rseqc/{sample}.junctionSaturation_plot.pdf",
-        r="../test-dataset/data/qc/rseqc/{sample}.junctionSaturation_plot.r"
+        pdf="../results/qc/rseqc/{sample}.junctionSaturation_plot.pdf",
+        r=".../results/qc/rseqc/{sample}.junctionSaturation_plot.r"
     conda:
         "../envs/rseqc_env.yaml"
     shell:

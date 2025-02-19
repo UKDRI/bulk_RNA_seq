@@ -1,11 +1,11 @@
 rule gene_body_coverage:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam",
-        bai="../test-dataset/data/aligned/{sample}.bam.bai",
-        annotation=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}.bed"
+        bam="../results/aligned/{sample}.bam",
+        bai="../results/aligned/{sample}.bam.bai",
+        annotation=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     output:
-        pdf="../test-dataset/data/qc/rseqc/{sample}.geneBodyCoverage.curves.pdf",
-        txt="../test-dataset/data/qc/rseqc/{sample}.geneBodyCoverage.txt"
+        pdf="../results/qc/rseqc/{sample}.geneBodyCoverage.curves.pdf",
+        txt="../results/qc/rseqc/{sample}.geneBodyCoverage.txt"
     conda:
         "../envs/rseqc_env.yaml"
     shell:

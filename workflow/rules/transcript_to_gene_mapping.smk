@@ -1,8 +1,8 @@
 rule transcript_to_gene_mapping:
     input:
-        gtf=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}_annotation.gtf"
+        gtf=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf"
     output:
-        map_csv="../test-dataset/data/Quant/transcript_to_gene_mapping.csv"
+        map_csv="../results/Quant/transcript_to_gene_mapping.csv"
     conda:
         "../envs/transcript_to_gene_env.yaml"
     shell:

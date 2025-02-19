@@ -1,12 +1,12 @@
 rule salmon_quant_reads:
     input:
-        r1="../test-dataset/data/trimmed/{sample}_1.atria.fq.gz",
-        r2="../test-dataset/data/trimmed/{sample}_2.atria.fq.gz",
-        index=f"data/genome/{selected_genome}/salmon/salmon_index_{selected_genome}"
+        r1="../results/trimmed/{sample}_1.atria.fq.gz",
+        r2="../results/trimmed/{sample}_2.atria.fq.gz",
+        index=f"../results/genome/{selected_genome}/salmon/salmon_index_{selected_genome}"
     output:
-        quant="../test-dataset/data/Quant/Count/quant/{sample}/quant.sf"
+        quant="../results/Quant/Count/quant/{sample}/quant.sf"
     log:
-        "../test-dataset/data/Quant/Count/quant/{sample}/{sample}.log"
+        "../results/Quant/Count/quant/{sample}/{sample}.log"
     params:
         libtype="A",
         extra=""

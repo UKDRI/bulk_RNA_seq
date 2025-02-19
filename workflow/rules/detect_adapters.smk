@@ -1,9 +1,9 @@
 rule detect_adapters:
     input:
-        fq1="../test-dataset/data/raw2/{sample}_1.fq.gz",
-        fq2="../test-dataset/data/raw2/{sample}_2.fq.gz"
+        fq1="../rawdata/{sample}_1.fq.gz",
+        fq2="../rawdata/{sample}_2.fq.gz"
     output:
-        adapter_txt="../test-dataset/data/adapters/{sample}_adapters.txt"
+        adapter_txt="../results/adapters/{sample}_adapters.txt"
     threads: 8
     conda:
         "../envs/qc.yaml"

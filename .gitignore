@@ -1,3 +1,7 @@
 .snakemake/conda/
 .snakemake/log/
 .snakemake/metadata/
+workflow/rules/._*.smk
+workflow/scripts/._*.R
+workflow/._*
+.*

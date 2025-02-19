@@ -5,7 +5,7 @@
 # Download the primary assembly (DNA) FASTA file
 rule download_human_genome:
     output:
-        "data/genome/hg38/hg38_genome.fa.gz"
+        "../results/genome/hg38/hg38_genome.fa.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -16,7 +16,7 @@ rule download_human_genome:
 # Download the cDNA FASTA file (transcriptome)
 rule download_human_transcriptome:
     output:
-        "data/genome/hg38/hg38_transcriptome.fa.gz"
+        "../results/genome/hg38/hg38_transcriptome.fa.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -27,7 +27,7 @@ rule download_human_transcriptome:
 # Download the GTF annotation file
 rule download_human_annotation:
     output:
-        "data/genome/hg38/hg38_annotation.gtf.gz"
+        "../results/genome/hg38/hg38_annotation.gtf.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -38,37 +38,37 @@ rule download_human_annotation:
 # Unzip the genome for STAR
 rule unzip_human_genome:
     input:
-        "data/genome/hg38/hg38_genome.fa.gz"
+        "../results/genome/hg38/hg38_genome.fa.gz"
     output:
-        "data/genome/hg38/hg38_genome.fa"
+        "../results/genome/hg38/hg38_genome.fa"
     shell:
         "gunzip -c {input} > {output}"
 
 # Unzip the transcriptome for Salmon
 rule unzip_human_transcriptome:
     input:
-        "data/genome/hg38/hg38_transcriptome.fa.gz"
+        "../results/genome/hg38/hg38_transcriptome.fa.gz"
     output:
-        "data/genome/hg38/hg38_transcriptome.fa"
+        "../results/genome/hg38/hg38_transcriptome.fa"
     shell:
         "gunzip -c {input} > {output}"
 
 # Unzip the annotation for STAR
 rule unzip_human_annotation:
     input:
-        "data/genome/hg38/hg38_annotation.gtf.gz"
+        "../results/genome/hg38/hg38_annotation.gtf.gz"
     output:
-        "data/genome/hg38/hg38_annotation.gtf"
+        "../results/genome/hg38/hg38_annotation.gtf"
     shell:
         "gunzip -c {input} > {output}"
 
 # (Optional) Build STAR index for alignment
 rule build_star_index_genome:
     input:
-        genome_fa="data/genome/hg38/hg38_genome.fa",
-        gtf_file="data/genome/hg38/hg38_annotation.gtf"
+        genome_fa="../results/genome/hg38/hg38_genome.fa",
+        gtf_file="../results/genome/hg38/hg38_annotation.gtf"
     output:
-        directory("data/genome/hg38/star_index_hg38")
+        directory("../results/genome/hg38/star_index_hg38")
     conda:
         "../envs/align.yaml"
     threads: 20
@@ -86,9 +86,9 @@ rule build_star_index_genome:
 # Build Salmon index from the unzipped transcriptome
 rule build_salmon_index:
     input:
-        transcriptome="data/genome/hg38/hg38_transcriptome.fa"
+        transcriptome="../results/genome/hg38/hg38_transcriptome.fa"
     output:
-        directory("data/genome/hg38/salmon/salmon_index_hg38")
+        directory("../results/genome/hg38/salmon/salmon_index_hg38")
     conda:
         "../envs/quant.yaml"
     threads: 8

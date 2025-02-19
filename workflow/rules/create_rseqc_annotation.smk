@@ -1,7 +1,7 @@
 rule create_rseqc_annotation:
     params:
-        gtf=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}_annotation.gtf",
-        bed12=lambda wildcards: f"data/genome/{selected_genome}/{selected_genome}.bed"
+        gtf=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
+        bed12=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     input:
         gtf="{params.gtf}"
     output:

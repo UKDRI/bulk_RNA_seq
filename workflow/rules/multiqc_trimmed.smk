@@ -1,9 +1,9 @@
 rule multiqc_trimmed:
     input:
-        fastqc_r1=expand("../test-dataset/data/fastqc/trimmed/{sample}_1.atria_fastqc.zip", sample=samples),
-        fastqc_r2=expand("../test-dataset/data/fastqc/trimmed/{sample}_2.atria_fastqc.zip", sample=samples)
+        fastqc_r1=expand("../results/fastqc/trimmed/{sample}_1.atria_fastqc.zip", sample=samples),
+        fastqc_r2=expand("../results/fastqc/trimmed/{sample}_2.atria_fastqc.zip", sample=samples)
     output:
-        "../test-dataset/data/multiqc/trimmed/multiqc_report.html"
+        "../results/multiqc/trimmed/multiqc_report.html"
     conda:
         "../envs/multiqc_new.yaml"
     shell:
@@ -24,5 +24,5 @@ rule multiqc_trimmed:
         fi
 
         # Run MultiQC if all files are present
-        multiqc ../test-dataset/data/fastqc/trimmed/ -o $(dirname {output})
+        multiqc ../results/fastqc/trimmed/ -o $(dirname {output})
         """

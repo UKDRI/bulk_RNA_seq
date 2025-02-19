@@ -1,12 +1,12 @@
 rule fastqc_trimmed:
     input:
-        r1="../test-dataset/data/trimmed/{sample}_1.atria.fq.gz",
-        r2="../test-dataset/data/trimmed/{sample}_2.atria.fq.gz"
+        r1="../results/trimmed/{sample}_1.atria.fq.gz",
+        r2="../results/trimmed/{sample}_2.atria.fq.gz"
     output:
-        r1_fastqc_html="../test-dataset/data/fastqc/trimmed/{sample}_1.atria_fastqc.html",
-        r1_fastqc_zip="../test-dataset/data/fastqc/trimmed/{sample}_1.atria_fastqc.zip",
-        r2_fastqc_html="../test-dataset/data/fastqc/trimmed/{sample}_2.atria_fastqc.html",
-        r2_fastqc_zip="../test-dataset/data/fastqc/trimmed/{sample}_2.atria_fastqc.zip"
+        r1_fastqc_html="../results/fastqc/trimmed/{sample}_1.atria_fastqc.html",
+        r1_fastqc_zip="../results/fastqc/trimmed/{sample}_1.atria_fastqc.zip",
+        r2_fastqc_html="../results/fastqc/trimmed/{sample}_2.atria_fastqc.html",
+        r2_fastqc_zip="../results/fastqc/trimmed/{sample}_2.atria_fastqc.zip"
     conda:
         "../envs/qc.yaml"
     threads: 20

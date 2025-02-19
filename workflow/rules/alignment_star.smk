@@ -2,7 +2,7 @@
 import os
 import time
 
-TMP_BASE_DIR = "../test-dataset/data/aligned/tmp/star_jobs"
+TMP_BASE_DIR = "../results/aligned/tmp/star_jobs"
 THREADS = 40
 STAR_RAM = 10000000000  # Limit for STAR's RAM usage in bytes
 
@@ -27,18 +27,18 @@ adjust_ulimit()
 rule alignment_star:
     """
     Align paired-end reads with STAR for a sample that includes {sample} and {genome}.
-    The genome index is computed from wildcards: data/genome/{genome}/star_index_{genome}.
+    The genome index is computed from wildcards: "../results/genome/{genome}/star_index_{genome}.
     """
     input:
         # Trimmed FASTQs
-        r1 = "../test-dataset/data/trimmed/{sample}_1.atria.fq.gz",
-        r2 = "../test-dataset/data/trimmed/{sample}_2.atria.fq.gz",
+        r1 = "../results/trimmed/{sample}_1.atria.fq.gz",
+        r2 = "../results/trimmed/{sample}_2.atria.fq.gz",
         # Use a lambda to derive the star index path from the genome wildcard
-        star_index=f"data/genome/{selected_genome}/star_index_{selected_genome}"
+        star_index=f"../results/genome/{selected_genome}/star_index_{selected_genome}"
     output:
-        bam = "../test-dataset/data/aligned/{sample}.bam",
-        log = "../test-dataset/data/aligned/{sample}_Log.out",
-        sj  = "../test-dataset/data/aligned/{sample}_SJ.out.tab"
+        bam = "../results/aligned/{sample}.bam",
+        log = "../results/aligned/{sample}_Log.out",
+        sj  = "../results/aligned/{sample}_SJ.out.tab"
     params:
         tmp_dir = lambda wildcards: get_tmp_dir(wildcards.sample),
         star_ram = STAR_RAM

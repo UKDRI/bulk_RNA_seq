@@ -1,9 +1,9 @@
 rule samtools_stats:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam"
+        bam="../results/aligned/{sample}.bam"
     output:
-        stats="../test-dataset/data/qc/samtools/{sample}_samtools_stats.txt",
-        flagstat="../test-dataset/data/qc/samtools/{sample}_flagstat.txt"
+        stats="../results/qc/samtools/{sample}_samtools_stats.txt",
+        flagstat="../results/qc/samtools/{sample}_flagstat.txt"
     conda:
         "../envs/samtools.yaml"
     shell:

@@ -1,8 +1,8 @@
 rule index_bam:
     input:
-        bam="../test-dataset/data/aligned/{sample}.bam"
+        bam="../results/aligned/{sample}.bam"
     output:
-        index="../test-dataset/data/aligned/{sample}.bam.bai"
+        index="../results/aligned/{sample}.bam.bai"
     conda:
         "../envs/samtools.yaml"
     shell:

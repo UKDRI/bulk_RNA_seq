@@ -1,7 +1,7 @@
 # Download the primary assembly (DNA) FASTA file (Release 110)
 rule download_mouse_genome:
     output:
-        "data/genome/mm39/mm39_genome.fa.gz"
+        "../results/genome/mm39/mm39_genome.fa.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -12,7 +12,7 @@ rule download_mouse_genome:
 # Download the GTF annotation file
 rule download_mouse_annotation:
     output:
-        "data/genome/mm39/mm39_annotation.gtf.gz"
+        "../results/genome/mm39/mm39_annotation.gtf.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -23,7 +23,7 @@ rule download_mouse_annotation:
 # Download the cDNA FASTA file (transcriptome)
 rule download_mouse_transcriptome:
     output:
-        "data/genome/mm39/mm39_transcriptome.fa.gz"
+        "../results/genome/mm39/mm39_transcriptome.fa.gz"
     shell:
         """
         mkdir -p $(dirname {output})
@@ -34,37 +34,37 @@ rule download_mouse_transcriptome:
 # Unzip the genome for STAR
 rule unzip_mouse_genome:
     input:
-        "data/genome/mm39/mm39_genome.fa.gz"
+        "../results/genome/mm39/mm39_genome.fa.gz"
     output:
-        "data/genome/mm39/mm39_genome.fa"
+        "../results/genome/mm39/mm39_genome.fa"
     shell:
         "gunzip -c {input} > {output}"
 
 # Unzip the annotation for STAR
 rule unzip_mouse_annotation:
     input:
-        "data/genome/mm39/mm39_annotation.gtf.gz"
+        "../results/genome/mm39/mm39_annotation.gtf.gz"
     output:
-        "data/genome/mm39/mm39_annotation.gtf"
+        "../results/genome/mm39/mm39_annotation.gtf"
     shell:
         "gunzip -c {input} > {output}"
 
 # Unzip the transcriptome for Salmon
 rule unzip_mouse_transcriptome:
     input:
-        "data/genome/mm39/mm39_transcriptome.fa.gz"
+        "../results/genome/mm39/mm39_transcriptome.fa.gz"
     output:
-        "data/genome/mm39/mm39_transcriptome.fa"
+        "../results/genome/mm39/mm39_transcriptome.fa"
     shell:
         "gunzip -c {input} > {output}"
 
 # (Optional) Build STAR index for alignment
 rule build_star_index_mm39:
     input:
-        genome_fa="data/genome/mm39/mm39_genome.fa",
-        gtf_file="data/genome/mm39/mm39_annotation.gtf"
+        genome_fa="../results/genome/mm39/mm39_genome.fa",
+        gtf_file="../results/genome/mm39/mm39_annotation.gtf"
     output:
-        directory("data/genome/mm39/star_index_mm39")
+        directory("../results/genome/mm39/star_index_mm39")
     conda:
         "../envs/align.yaml"
     threads: 20
@@ -81,9 +81,9 @@ rule build_star_index_mm39:
 # Build Salmon index from the unzipped transcriptome
 rule build_salmon_index_mm39:
     input:
-        transcriptome = "data/genome/mm39/mm39_transcriptome.fa"
+        transcriptome = "../results/genome/mm39/mm39_transcriptome.fa"
     output:
-        directory("data/genome/mm39/salmon/salmon_index_mm39")
+        directory("../results/genome/mm39/salmon/salmon_index_mm39")
     conda:
         "../envs/quant.yaml"
     threads: 8

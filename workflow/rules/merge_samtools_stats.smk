@@ -1,8 +1,8 @@
 rule merge_samtools_stats:
     input:
-        stats_files=expand("../test-dataset/data/qc/samtools/{sample}_samtools_stats.txt", sample=samples)
+        stats_files=expand("../results/qc/samtools/{sample}_samtools_stats.txt", sample=samples)
     output:
-        merged_stats="../test-dataset/data/qc/samtools/merged_samtools_stats.xlsx"
+        merged_stats="../results/qc/samtools/merged_samtools_stats.xlsx"
     conda:
         "../envs/merge_env.yaml"
     shell:
