@@ -1,1 +1,3 @@
 .snakemake/conda/
+.snakemake/log/
+.snakemake/metadata/

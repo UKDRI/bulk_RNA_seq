@@ -1,57 +1,97 @@
-# Download mouse genome FASTA file
+# Download the primary assembly (DNA) FASTA file (Release 110)
 rule download_mouse_genome:
     output:
-        "data/mm39/mm39_genome.fa.gz"
+        "data/genome/mm39/mm39_genome.fa.gz"
     shell:
         """
-        wget ftp://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz -O {output}
+        mkdir -p $(dirname {output})
+        wget -N ftp://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/dna/Mus_musculus.GRCm39.dna.primary_assembly.fa.gz \
+            -O {output}
         """
 
-# Download mouse GTF annotation file
+# Download the GTF annotation file
 rule download_mouse_annotation:
     output:
         "data/genome/mm39/mm39_annotation.gtf.gz"
     shell:
         """
-        wget ftp://ftp.ensembl.org/pub/release-110/gtf/mus_musculus/Mus_musculus.GRCm39.110.gtf.gz -O {output}
+        mkdir -p $(dirname {output})
+        wget -N ftp://ftp.ensembl.org/pub/release-110/gtf/mus_musculus/Mus_musculus.GRCm39.110.gtf.gz \
+            -O {output}
         """
 
-rule build_star_index:
-    input:
-        genome_fa="data/genome/mm39/mm39_genome.fa",  # Genome FASTA
-        gtf_file="data/genome/mm39/mm39_annotation.gtf"  # GTF
-    output:
-        directory("data/genome/mm39/star_index_mm39")
-    conda:
-        "../envs/align.yaml"  # Conda environment for STAR
-    shell:
-        """
-        # Run STAR genome generation with provided genome FASTA
-        STAR --runMode genomeGenerate --genomeDir {output} \
-             --genomeFastaFiles {input.genome_fa} \
-             --sjdbGTFfile {input.gtf_file} --runThreadN 8
-        """
-
-
-# NEW: Download mouse transcriptome for Salmon quantification
+# Download the cDNA FASTA file (transcriptome)
 rule download_mouse_transcriptome:
     output:
         "data/genome/mm39/mm39_transcriptome.fa.gz"
     shell:
         """
-        wget ftp://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/cdna/Mus_musculus.GRCm39.cdna.all.fa.gz -O {output}
+        mkdir -p $(dirname {output})
+        wget -N ftp://ftp.ensembl.org/pub/release-110/fasta/mus_musculus/cdna/Mus_musculus.GRCm39.cdna.all.fa.gz \
+            -O {output}
         """
 
-# NEW: Build Salmon index from the transcriptome
-rule build_salmon_index:
+# Unzip the genome for STAR
+rule unzip_mouse_genome:
     input:
-        transcriptome="data/genome/mm39/mm39_transcriptome.fa.gz"  # Gzipped transcriptome
+        "data/genome/mm39/mm39_genome.fa.gz"
     output:
-        directory("data/genome/mm39/salmon_index_mm39")
+        "data/genome/mm39/mm39_genome.fa"
+    shell:
+        "gunzip -c {input} > {output}"
+
+# Unzip the annotation for STAR
+rule unzip_mouse_annotation:
+    input:
+        "data/genome/mm39/mm39_annotation.gtf.gz"
+    output:
+        "data/genome/mm39/mm39_annotation.gtf"
+    shell:
+        "gunzip -c {input} > {output}"
+
+# Unzip the transcriptome for Salmon
+rule unzip_mouse_transcriptome:
+    input:
+        "data/genome/mm39/mm39_transcriptome.fa.gz"
+    output:
+        "data/genome/mm39/mm39_transcriptome.fa"
+    shell:
+        "gunzip -c {input} > {output}"
+
+# (Optional) Build STAR index for alignment
+rule build_star_index_mm39:
+    input:
+        genome_fa="data/genome/mm39/mm39_genome.fa",
+        gtf_file="data/genome/mm39/mm39_annotation.gtf"
+    output:
+        directory("data/genome/mm39/star_index_mm39")
     conda:
-        "../envs/quant.yaml"  # Conda environment for Salmon
+        "../envs/align.yaml"
+    threads: 20
     shell:
         """
-        # Run Salmon index generation with gzipped transcriptome file
-        salmon index -t {input.transcriptome} -i {output}
+        mkdir -p {output}
+        STAR --runMode genomeGenerate \
+             --genomeDir {output} \
+             --genomeFastaFiles {input.genome_fa} \
+             --sjdbGTFfile {input.gtf_file} \
+             --runThreadN {threads}
+        """
+
+# Build Salmon index from the unzipped transcriptome
+rule build_salmon_index_mm39:
+    input:
+        transcriptome = "data/genome/mm39/mm39_transcriptome.fa"
+    output:
+        directory("data/genome/mm39/salmon/salmon_index_mm39")
+    conda:
+        "../envs/quant.yaml"
+    threads: 8
+    shell:
+        """
+        mkdir -p {output}
+        salmon index \
+            -t {input.transcriptome} \
+            -i {output} \
+            -p {threads}
         """

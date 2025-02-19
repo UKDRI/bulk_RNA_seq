@@ -1,0 +1,6 @@
+name: gtf2bed_env
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bedops

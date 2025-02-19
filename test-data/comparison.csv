@@ -1,6 +1,3 @@
-﻿comparison_number,treatment,control,
-1,GM12878,K562,
-2,MCF7,H1,
-,,,
-,,,
-,,,
+﻿comparison_number,treatment,control
+1,GM12878,K562
+2,MCF7,H1

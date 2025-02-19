@@ -1,55 +1,73 @@
+##################################
+# Main Snakefile
+##################################
+
 import pandas as pd
 import os
 from snakemake.utils import min_version
 from snakemake.shell import shell
 
-# Set minimum Snakemake version
+# Minimum Snakemake version
 min_version("8.8.0")
 
-# Load configuration
+# Load config
 configfile: "config/config.yaml"
 
 # Load sample sheet
 samplesheet_df = pd.read_csv(config["sample_sheet"])
+samplesheet_df["genome"] = (
+    samplesheet_df["genome"].astype(str).str.strip("\"' \t")
+)
 samples = samplesheet_df["sample_id"].tolist()
 
-# Extract genome type (Assume all samples use the same genome)
+# Ensure only one genome is used
 genomes = samplesheet_df["genome"].unique().tolist()
-
 if len(genomes) > 1:
-    raise ValueError("Multiple genome types detected! Ensure all samples use the same genome.")
-    
-selected_genome = genomes[0]  # Assume the first genome in the list
+    raise ValueError("Multiple genome types detected! Use only one genome in the sample sheet.")
+selected_genome = genomes[0]  # e.g. "hg38" or "mm39"
 
-
-# Dynamically generate comparisons list from the comparisons file
+# Load comparison list from CSV
 comparisons_file = "test-data/comparison.csv"
 comparisons_df = pd.read_csv(comparisons_file)
-comparisons = comparisons_df.apply(lambda row: f"{row['treatment']}_vs_{row['control']}", axis=1).tolist()
+comparisons = comparisons_df.apply(
+    lambda row: f"{row['treatment']}_vs_{row['control']}",
+    axis=1
+).tolist()
 
-# Define report output
+# Final report output
 report: "report/workflow.rst"
 
-# Include modular rules dynamically based on genome selection
-include: f"rules/download_ref_{selected_genome}.smk"
+##################################
+# Include Genome-Specific Rules
+##################################
+
+# Always include BOTH rule sets; Snakemake will only run the rules needed
+include: "rules/download_ref_hg38.smk"
+include: "rules/download_ref_mm39.smk"
+include: "rules/convert_gtf_to_bed.smk"
+
+# Additional reference-based annotation
 include: "rules/create_rseqc_annotation.smk"
 
-# Quality control and trimming
+##################################
+# QC and Trimming Rules
+##################################
 include: "rules/download_atria.smk"
 include: "rules/detect_adapters.smk"
 include: "rules/fastqc_raw.smk"
 include: "rules/multiqc_raw.smk"
-include: "rules/trimming.smk"
+include: "rules/trimming2.smk"
 include: "rules/fastqc_trimmed.smk"
 include: "rules/multiqc_trimmed.smk"
 
-# Alignment and quantification
+##################################
+# Alignment and Quantification
+##################################
 include: "rules/alignment_star.smk"
 include: "rules/index_bam.smk"
 include: "rules/samtools_stats.smk"
 include: "rules/mosdepth.smk"
 include: "rules/multiqc_bam.smk"
-include: "rules/build_salmon_index.smk"
 include: "rules/quantify_transcripts_salmon.smk"
 include: "rules/combine_expression_matrix.smk"
 include: "rules/transcript_to_gene_mapping.smk"
@@ -67,13 +85,25 @@ include: "rules/process_genome_content.smk"
 include: "rules/go_enrichment.smk"
 include: "rules/deseq_analysis_comparison.smk"
 
-# Define the final 'all' rule
+##################################
+# Final rule: all
+##################################
+
 rule all:
     input:
+        # Example: combined expression output
         "../test-dataset/data/Quant/Count/combined_expression.csv",
+
+        # Example: Salmon quantification for each sample
         expand("../test-dataset/data/Quant/Count/quant/{sample}/quant.sf", sample=samples),
-        "../test-dataset/data/Differential/deglist/",
+
+        # Example: DE results
+        expand("../test-dataset/data/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons),
+
+        # Example: transcript-to-gene map
         "../test-dataset/data/Quant/transcript_to_gene_mapping.csv",
+
+        # Example: raw, trimmed, QC, alignment, etc. 
         expand("../test-dataset/data/raw2/{sample}_{suffix}.fq.gz", sample=samples, suffix=["1", "2"]),
         expand("../test-dataset/data/adapters/{sample}_adapters.txt", sample=samples),
         expand("../test-dataset/data/trimmed/{sample}_{suffix}.atria.fq.gz", sample=samples, suffix=["1", "2"]),
@@ -99,10 +129,19 @@ rule all:
         expand("../test-dataset/data/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
         expand("../test-dataset/data/qc/rseqc/{sample}_bam_stat.txt", sample=samples),
         expand("../test-dataset/data/qc/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
+
+        # Example: GO enrichment CSV outputs
         expand("../test-dataset/data/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv", comparison=comparisons),
         expand("../test-dataset/data/enrichment/GO/Molecular_Function/{comparison}_molecular_function_enrichment.csv", comparison=comparisons),
         expand("../test-dataset/data/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv", comparison=comparisons),
-        f"data/genome/{selected_genome}/{selected_genome}_annotation.gtf.gz",
-        f"data/genome/{selected_genome}/{selected_genome}_genome.fa.gz",
+
+        # The unzipped reference files + Salmon index for the selected genome
+        f"data/genome/{selected_genome}/{selected_genome}_annotation.gtf",
+        f"data/genome/{selected_genome}/{selected_genome}_genome.fa",
+        f"data/genome/{selected_genome}/{selected_genome}_transcriptome.fa",
         f"data/genome/{selected_genome}/salmon/salmon_index_{selected_genome}",
-        "tools/Atria/atria-4.1.1/bin/atria",
+        f"data/genome/{selected_genome}/{selected_genome}.bed",
+
+
+        # Example: Atria tool
+        "tools/Atria/atria-4.1.1/bin/atria"

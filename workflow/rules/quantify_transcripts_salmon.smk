@@ -1,8 +1,8 @@
 rule salmon_quant_reads:
     input:
-        r1="../test-dataset/data/trimmed/{sample}_1.fq.gz",
-        r2="../test-dataset/data/trimmed/{sample}_2.fq.gz",
-        index=rules.build_salmon_index.output.index_dir  # Ensure dependency on the built index
+        r1="../test-dataset/data/trimmed/{sample}_1.atria.fq.gz",
+        r2="../test-dataset/data/trimmed/{sample}_2.atria.fq.gz",
+        index=f"data/genome/{selected_genome}/salmon/salmon_index_{selected_genome}"
     output:
         quant="../test-dataset/data/Quant/Count/quant/{sample}/quant.sf"
     log:
