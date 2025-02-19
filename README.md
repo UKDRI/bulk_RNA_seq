@@ -12,8 +12,8 @@ Snakemake pipeline processes paired-end FASTQ files through quality control, ali
 - **Differential Expression Analysis** (`DESeq2`)
 - **GO Enrichment Analysis** (`clusterProfiler`)
 
-![Pipeline Rulegraph:]
-<object data="rulegraph.pdf" type="application/pdf" width="80%"> </object>
+![Pipeline Rulegraph](rulegraph.png)
+
 
 ## 📥 Installation
 
