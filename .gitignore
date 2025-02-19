@@ -5,3 +5,4 @@ workflow/rules/._*.smk
 workflow/scripts/._*.R
 workflow/._*
 .*
+.DS_Store
