@@ -33,10 +33,6 @@ comparisons = comparisons_df.apply(
 # Final report output
 report: "report/workflow.rst"
 
-##################################
-# Include Genome-Specific Rules
-##################################
-
 # Always include BOTH rule sets; Snakemake will only run the rules needed
 include: "rules/download_ref_hg38.smk"
 include: "rules/download_ref_mm39.smk"
@@ -46,7 +42,7 @@ include: "rules/convert_gtf_to_bed.smk"
 include: "rules/create_rseqc_annotation.smk"
 
 ##################################
-# QC and Trimming Rules
+# QC and Trimming
 ##################################
 include: "rules/download_atria.smk"
 include: "rules/detect_adapters.smk"
@@ -81,10 +77,6 @@ include: "rules/process_genome_content.smk"
 include: "rules/go_enrichment.smk"
 include: "rules/deseq_analysis_comparison.smk"
 
-##################################
-# Final rule: all
-##################################
-
 rule all:
     input:
         "../results/Quant/Count/combined_expression.csv",
@@ -116,13 +108,11 @@ rule all:
         expand("../results/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
         expand("../results/qc/rseqc/{sample}_bam_stat.txt", sample=samples),
         expand("../results/qc/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
-
-        # Example: GO enrichment CSV outputs
         expand("../results/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv", comparison=comparisons),
         expand("../results/enrichment/GO/Molecular_Function/{comparison}_molecular_function_enrichment.csv", comparison=comparisons),
         expand("../results/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv", comparison=comparisons),
 
-        # The unzipped reference files + Salmon index for the selected genome
+        # The reference files + Salmon index for the selected genome
         f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
         f"../results/genome/{selected_genome}/{selected_genome}_genome.fa",
         f"../results/genome/{selected_genome}/{selected_genome}_transcriptome.fa",
