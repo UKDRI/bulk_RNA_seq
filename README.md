@@ -31,6 +31,10 @@ cd Bulk_RNA_seq
 
 ## User Input Files
 
+### Raw fastq files
+
+You should create a folder and rename it to "rawdata". You should have samplename_1.fq.gz and samplename_2.fq.gz for each samplename in the "rawdata" folder. The pipeline will use this as an input and then will output all the results in separate "results" folder.  
+
 ### Sample Sheet
 
 Currently, you can perform analysis on paired-end reads. You must provide a CSV file describing your samples. (If your data are in Excel format, please convert them to CSV or modify the pipeline accordingly.) The sample sheet should contain the following columns:
