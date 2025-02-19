@@ -1,5 +1,5 @@
-# bulk_RNA_seq
-Snakemake pipeline processing fastq files to the DESeq2, and GO annotations. 
+# Bulk RNA sequencing pipeline
+Snakemake pipeline processes paired-end FASTQ files through quality control, alignment, transcript quantification, differential expression analysis (DESeq2), and GO enrichment analysis 
 
 ## Pipeline Features
 
@@ -11,6 +11,8 @@ Snakemake pipeline processing fastq files to the DESeq2, and GO annotations.
 - **Quality Control Metrics** (`RSeQC`, `samtools`)
 - **Differential Expression Analysis** (`DESeq2`)
 - **GO Enrichment Analysis** (`clusterProfiler`)
+
+![Pipeline Rulegraph:](rulegraph.pdf "Each rule and connections in the snakemake pipeline")
 
 ## 📥 Installation
 
@@ -81,25 +83,7 @@ snakemake --use-conda -np
 
 ### 2️⃣ Run the Full Pipeline
 ```bash
-snakemake --use-conda --cores 30
-```
-💡 *Adjust `--cores` based on your system's available CPUs.*
-
-### 3️⃣ Run a Specific Step
-```bash
-snakemake --use-conda --cores 30 salmon_quant_reads
-```
-
-### 4️⃣ Force Rerun of a Specific Step
-```bash
-snakemake --use-conda -R build_salmon_index --cores 30
-```
-
-### 5️⃣ Rerun If File Modification Time Has Changed (recommended)
-
-If you have input files in correct format, you should skip generating them again by: 
-
-```bash
 snakemake --use-conda --rerun-triggers mtime --cores 30
 ```
+💡 *Adjust `--cores` based on your system's available CPUs.*
 
