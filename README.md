@@ -40,10 +40,10 @@ You should create a folder and rename it to "rawdata". You should have samplenam
 Currently, you can perform analysis on paired-end reads. You must provide a CSV file describing your samples. (If your data are in Excel format, please convert them to CSV or modify the pipeline accordingly.) The sample sheet should contain the following columns:
 
 - **group**: Experimental group (e.g., cell line or condition)
-- **sample_id**: A unique identifier for each sample
+- **sample_id**: A unique identifier for each sample, needs to match with samplename
 - **replicate**: Replicate number (e.g., 1, 2, …)
-- **fastq_1**: Path or URL for the raw FASTQ file (read 1)
-- **fastq_2**: Path or URL for the raw FASTQ file (read 2)
+- **fastq_1**: Path for the raw FASTQ file (read 1), e.g. samplename_1.fq.gz in rawdata folder
+- **fastq_2**: Path for the raw FASTQ file (read 2), e.g. samplename_2.fq.gz in rawdata folder
 - **genome**: Genome build used (e.g., "hg38" or "mm39")
 
 **Example:**
