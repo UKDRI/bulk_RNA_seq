@@ -6,3 +6,6 @@ workflow/scripts/._*.R
 workflow/._*
 .*
 .DS_Store
+.git
+*.pyc
+__pycache__

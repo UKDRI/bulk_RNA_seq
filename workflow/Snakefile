@@ -3,7 +3,6 @@ import os
 from snakemake.utils import min_version
 from snakemake.shell import shell
 
-# Minimum Snakemake version
 min_version("8.8.0")
 
 # Load config
