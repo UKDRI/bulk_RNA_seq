@@ -82,15 +82,25 @@ Place this file in the data/ directory (e.g., as data/comparison.csv), or update
 ## 🚀 Running the Pipeline
 
 ### 1️⃣ Test Pipeline Execution (Dry Run)
+
 ```bash
 snakemake --use-conda -np
 ```
 
 ### 2️⃣ Run the Full Pipeline
+
 ```bash
 snakemake --use-conda --rerun-triggers mtime --cores 30
 ```
 💡 *Adjust `--cores` based on your system's available CPUs.*
+
+### Run the Docker image
+
+To run the pipeline using the Docker image, mount your current directory into the container:
+
+```bash
+docker run --rm -v $(pwd):/app umranyaman/bulk-rna-seq --use-conda --rerun-triggers mtime --cores 30
+```
 
 ## License
 
