@@ -1,7 +1,8 @@
 rule detect_adapters:
     input:
         fq1="../rawdata/{sample}_1.fq.gz",
-        fq2="../rawdata/{sample}_2.fq.gz"
+        fq2="../rawdata/{sample}_2.fq.gz",
+        atria="../results/tools/Atria/atria-4.1.1/bin/atria"
     output:
         adapter_txt="../results/adapters/{sample}_adapters.txt"
     threads: 8
@@ -15,7 +16,7 @@ rule detect_adapters:
         mkdir -p $(dirname {output.adapter_txt})
 
         # Run Atria to detect adapters
-        tools/Atria/atria-4.1.1/bin/atria -r {input.fq1} -R {input.fq2} \
+        {input.atria} -r {input.fq1} -R {input.fq2} \
             -o $(dirname {output.adapter_txt})/temp_{wildcards.sample} --detect-adapter --threads {threads}
 
         # Locate the detected adapter summary file
