@@ -42,8 +42,6 @@ Currently, you can perform analysis on paired-end reads. You must provide a CSV 
 - **group**: Experimental group (e.g., cell line or condition)
 - **sample_id**: A unique identifier for each sample, needs to match with samplename
 - **replicate**: Replicate number (e.g., 1, 2, …)
-- **fastq_1**: Path for the raw FASTQ file (read 1), e.g. samplename_1.fq.gz in rawdata folder
-- **fastq_2**: Path for the raw FASTQ file (read 2), e.g. samplename_2.fq.gz in rawdata folder
 - **genome**: Genome build used (e.g., "hg38" or "mm39")
 
 **Example:**
