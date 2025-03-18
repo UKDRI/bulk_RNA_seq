@@ -49,10 +49,10 @@ Currently, you can perform analysis on paired-end reads. You must provide a CSV 
 **Example:**
 
 ```csv
-group,sample_id,replicate,fastq_1,fastq_2,genome
-GM12878,SRR3192657,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603629_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603629_T1_2.fastq.gz,hg38
-GM12878,SRR3192658,2,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603630_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603630_T1_2.fastq.gz,hg38
-K562,SRR3192408,1,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603392_T1_1.fastq.gz,s3://nf-core-awsmegatests/rnaseq/input_data/SRX1603392_T1_2.fastq.gz,hg38
+group,sample_id,replicate,genome
+GM12878,SRR3192657,1,hg38
+GM12878,SRR3192658,2,hg38
+K562,SRR3192408,1,hg38
 ...
 ```
 
