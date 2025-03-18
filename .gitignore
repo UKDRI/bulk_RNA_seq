@@ -9,3 +9,4 @@ workflow/._*
 .git
 *.pyc
 __pycache__
+.DS_Store
