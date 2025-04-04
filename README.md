@@ -99,7 +99,3 @@ To run the pipeline using the Docker image, mount your current directory into th
 ```bash
 docker run --rm -v $(pwd):/app umranyaman/bulk-rna-seq --use-conda --rerun-triggers mtime --cores 30
 ```
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
