@@ -1,4 +1,5 @@
 rule run_multiqc:
+    priority: 30
     input:
         # RSeQC outputs
         infer_experiment=expand("../results/qc/rseqc/{sample}_infer_experiment.txt", sample=samples),

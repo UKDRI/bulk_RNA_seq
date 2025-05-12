@@ -1,4 +1,5 @@
 rule combine_expression_matrix:
+    priority: 60
     input:
         quant_files=expand("../results/Quant/Count/quant/{sample}/quant.sf", sample=samples),
     output:

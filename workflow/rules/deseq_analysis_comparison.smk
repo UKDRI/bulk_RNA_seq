@@ -1,4 +1,5 @@
 rule deseq2_analysis_multiple:
+    priority: 50
     input:
         expression="../results/Quant/Count/combined_expression.csv",
         metadata="data/samplesheet_full.csv",
