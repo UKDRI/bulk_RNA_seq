@@ -6,10 +6,11 @@ rule download_atria:
     shell:
         """
         # Create the tools directory if it doesn't exist
-        mkdir -p tools
+        mkdir -p ../results/tools
 
-        cd tools
+        cd ../results/tools
 
+        export PATH="$HOME/.juliaup/bin:$PATH"  # Add Julia to PATH temporarily
         # Install Julia via juliaup and set the default version
         if ! command -v julia &> /dev/null; then
             echo "Julia not found, installing Julia"
@@ -31,6 +32,7 @@ rule download_atria:
         echo "Cloning Atria repository"
         git clone https://github.com/cihga39871/Atria.git
         cd Atria
+        git checkout v4.1.1
 
         # Build Atria using the Julia script
         if [ ! -f "build_atria.jl" ]; then
