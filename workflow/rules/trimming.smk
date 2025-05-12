@@ -16,8 +16,8 @@ rule trimming:
 
         # Read adapter sequences at runtime from the adapter file.
         # Adjust the extraction command based on your file format.
-        adapter1=$(awk -F'\t' 'NR==2 {{print $1}}' {input.adapters})
-        adapter2=$(awk -F'\t' 'NR==2 {{print $2}}' {input.adapters})
+        adapter1=$(awk -F'\\t' 'NR==2 {{print $2}}' {input.adapters})
+        adapter2=$(awk -F'\\t' 'NR==2 {{print $7}}' {input.adapters})
         
         echo "Using adapter1: $adapter1"
         echo "Using adapter2: $adapter2"
