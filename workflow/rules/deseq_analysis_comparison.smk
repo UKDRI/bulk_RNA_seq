@@ -2,6 +2,7 @@ rule deseq2_analysis_multiple:
     input:
         expression="../results/Quant/Count/combined_expression.csv",
         metadata="data/samplesheet_full.csv",
+        canonicals="../results/genome/hg38/hg38_canonical_transcripts.txt",
         comparisons="data/comparison.csv"
     output:
         deg_results=expand("../results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons)
@@ -15,5 +16,6 @@ rule deseq2_analysis_multiple:
             --expression {input.expression} \
             --metadata {input.metadata} \
             --comparisons {input.comparisons} \
-            --output_dir ../results/data/Differential/deglist/
+            --canonicals {input.canonicals} \
+            --output_dir ../results/Differential/deglist/
         """

@@ -22,6 +22,7 @@ option_list <- list(
     make_option(c("--expression"), type = "character", help = "Path to expression file"),
     make_option(c("--metadata"), type = "character", help = "Path to metadata file"),
     make_option(c("--comparisons"), type = "character", help = "Path to group comparisons CSV"),
+    make_option(c("--canonicals"), type = "character", help = "Path to list of canonical transcripts IDs"),
     make_option(c("--output_dir"), type = "character", help = "Directory to save results")
 )
 opt <- parse_args(OptionParser(option_list = option_list))
@@ -30,12 +31,14 @@ opt <- parse_args(OptionParser(option_list = option_list))
 if (!file.exists(opt$expression)) stop("Error: Expression file not found.")
 if (!file.exists(opt$metadata)) stop("Error: Metadata file not found.")
 if (!file.exists(opt$comparisons)) stop("Error: Comparisons file not found.")
+if (!file.exists(opt$canonicals)) stop("Error: Canonical transcripts file not found.")
 if (!dir.exists(opt$output_dir)) dir.create(opt$output_dir, recursive = TRUE)
 
 # Load input data
 counts <- fread(opt$expression, data.table = FALSE)
 metadata <- fread(opt$metadata, data.table = FALSE)
 comparisons <- fread(opt$comparisons, data.table = FALSE)
+canonical_transcript_ids <- fread(opt$canonicals, data.table = FALSE, col.names=c("transcript_id"), quote="")
 
 # Ensure consistent samples
 colnames(counts)[1] <- "gene_id"
@@ -43,12 +46,17 @@ sample_ids <- intersect(colnames(counts)[-1], metadata$sample_id)
 if (length(sample_ids) < 2) stop("Error: Not enough matching samples between counts and metadata.")
 cat("Matching sample IDs:", paste(sample_ids, collapse = ", "), "\n")
 
+# Removing the version of the transcript if present
+counts$unversioned_id <- sapply(strsplit(counts$gene_id,"\\."), `[`, 1)
+# Keeping only the canonical transcripts
+counts <- counts[counts$unversioned_id %in% canonical_transcript_ids$transcript_id,]
+
 # Map Ensembl IDs to Gene Names
 gene_names <- AnnotationDbi::mapIds(
     org.Mm.eg.db,  # For human: use org.Hs.eg.db
-    keys = counts$gene_id,
+    keys = counts$unversioned_id,
     column = "SYMBOL",
-    keytype = "ENSEMBL",
+    keytype = "ENSEMBLTRANS",
     multiVals = "first"
 )
 counts$gene_name <- ifelse(is.na(gene_names), "Unknown", gene_names)

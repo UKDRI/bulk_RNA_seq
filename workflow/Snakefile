@@ -78,6 +78,7 @@ include: "rules/deseq_analysis_comparison.smk"
 rule all:
     input:
         "../results/Quant/Count/combined_expression.csv",
+        "../results/genome/hg38/hg38_canonical_transcripts.txt",
         expand("../results/Quant/Count/quant/{sample}/quant.sf", sample=samples),
         expand("../results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons),
         "../results/Quant/transcript_to_gene_mapping.csv",

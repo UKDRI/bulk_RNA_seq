@@ -62,6 +62,16 @@ rule unzip_human_annotation:
     shell:
         "gunzip -c {input} > {output}"
 
+rule get_canonical_transcripts:
+    input:
+        "../results/genome/hg38/hg38_annotation.gtf"
+    output:
+        "../results/genome/hg38/hg38_canonical_transcripts.txt"
+    shell:
+        """
+        grep Ensembl_canonical {input} | cut -d ';' -f3 | cut -d '"' -f2 | sort -u > {output}
+        """
+
 # (Optional) Build STAR index for alignment
 rule build_star_index_genome:
     input:
