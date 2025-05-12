@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 
 # Load required libraries
-required_packages <- c("DESeq2", "data.table", "optparse", "ggplot2", "dplyr", "AnnotationDbi", "org.Mm.eg.db", "ggrepel")
+required_packages <- c("DESeq2", "data.table", "optparse", "ggplot2", "dplyr", "AnnotationDbi", "org.Hs.eg.db", "org.Mm.eg.db", "ggrepel")
 
 for (pkg in required_packages) {
     if (!requireNamespace(pkg, quietly = TRUE)) {
-        if (pkg %in% c("DESeq2", "AnnotationDbi", "org.Mm.eg.db")) {
+        if (pkg %in% c("DESeq2", "AnnotationDbi", "org.Mm.eg.db", "org.Hs.eg.db")) {
             if (!requireNamespace("BiocManager", quietly = TRUE)) {
                 install.packages("BiocManager", repos = "https://cloud.r-project.org")
             }
