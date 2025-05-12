@@ -9,7 +9,7 @@ rule fastqc_raw:
         r2_fastqc_zip="../results/fastqc/raw/{sample}_2_fastqc.zip"
     conda:
         "../envs/qc.yaml"
-    threads: 20
+    threads: 2
     shell:
         """
         # Ensure the output directory exists

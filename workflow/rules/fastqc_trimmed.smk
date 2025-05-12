@@ -9,7 +9,7 @@ rule fastqc_trimmed:
         r2_fastqc_zip="../results/fastqc/trimmed/{sample}_2.atria_fastqc.zip"
     conda:
         "../envs/qc.yaml"
-    threads: 20
+    threads: 2
     shell:
         """
         # Ensure the output directory exists
