@@ -35,7 +35,6 @@ report: "report/workflow.rst"
 # Always include BOTH rule sets; Snakemake will only run the rules needed
 include: "rules/download_ref_hg38.smk"
 include: "rules/download_ref_mm39.smk"
-include: "rules/convert_gtf_to_bed.smk"
 
 # Additional reference-based annotation
 include: "rules/create_rseqc_annotation.smk"

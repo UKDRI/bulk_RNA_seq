@@ -1,11 +1,8 @@
 rule create_rseqc_annotation:
-    params:
-        gtf=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
-        bed12=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     input:
-        gtf="{params.gtf}"
+        gtf=f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
     output:
-        bed12="{params.bed12}"
+        bed=f"../results/genome/{selected_genome}/{selected_genome}.bed"
     conda:
         "../envs/rseqc_env.yaml"
     shell:
@@ -22,7 +19,7 @@ rule create_rseqc_annotation:
         gtfToGenePred {input.gtf} temp_{selected_genome}.genePred
 
         # Convert genePred to BED12 format
-        genePredToBed temp_{selected_genome}.genePred {output.bed12}
+        genePredToBed temp_{selected_genome}.genePred {output.bed}
 
         # Clean up intermediate files
         rm -f temp_{selected_genome}.genePred
