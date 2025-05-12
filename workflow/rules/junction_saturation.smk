@@ -4,7 +4,7 @@ rule junction_saturation:
         annotation=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
     output:
         pdf="../results/qc/rseqc/{sample}.junctionSaturation_plot.pdf",
-        r=".../results/qc/rseqc/{sample}.junctionSaturation_plot.r"
+        r="../results/qc/rseqc/{sample}.junctionSaturation_plot.r"
     conda:
         "../envs/rseqc_env.yaml"
     shell:
@@ -16,10 +16,6 @@ rule junction_saturation:
 
         # Run junction_saturation.py
         junction_saturation.py -i {input.bam} -r {input.annotation} -o $(dirname {output.pdf})/{wildcards.sample}
-
-        # Move generated files to expected names
-        mv $(dirname {output.pdf})/{wildcards.sample}.junctionSaturation_plot.pdf {output.pdf}
-        mv $(dirname {output.pdf})/{wildcards.sample}.junctionSaturation_plot.r {output.r}
 
         # Verify outputs exist
         if [ ! -s {output.pdf} ] || [ ! -s {output.r} ]; then

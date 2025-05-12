@@ -19,12 +19,6 @@ rule rpkm_saturation:
         # Run RPKM_saturation.py
         RPKM_saturation.py -i {input.bam} -r {input.annotation} -o $(dirname {output.saturation_pdf})/{wildcards.sample}
 
-        # Move generated files to expected names
-        mv $(dirname {output.saturation_pdf})/{wildcards.sample}.eRPKM.xls {output.eRPKM}
-        mv $(dirname {output.saturation_pdf})/{wildcards.sample}.rawCount.xls {output.rawCount}
-        mv $(dirname {output.saturation_pdf})/{wildcards.sample}.saturation.pdf {output.saturation_pdf}
-        mv $(dirname {output.saturation_pdf})/{wildcards.sample}.saturation.r {output.saturation_r}
-
         # Verify outputs exist
         if [ ! -s {output.eRPKM} ] || [ ! -s {output.rawCount} ] || [ ! -s {output.saturation_pdf} ] || [ ! -s {output.saturation_r} ]; then
             echo "Error: RPKM_saturation.py did not generate expected outputs." >&2

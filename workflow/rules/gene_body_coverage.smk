@@ -17,8 +17,4 @@ rule gene_body_coverage:
 
         # Run geneBody_coverage.py once and generate both PDF and TXT outputs
         geneBody_coverage.py -i {input.bam} -r {input.annotation} -o $(dirname {output.pdf})/{wildcards.sample}
-
-        # Ensure the output file is correctly named
-        mv $(dirname {output.pdf})/{wildcards.sample}.geneBodyCoverage.txt {output.txt}
-        mv $(dirname {output.pdf})/{wildcards.sample}.geneBodyCoverage.curves.pdf {output.pdf}
         """
