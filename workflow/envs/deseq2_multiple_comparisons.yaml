@@ -14,12 +14,13 @@ dependencies:
   - r-biocmanager
   - r-devtools
   - r-ggrepel 
-  - libxml2
   - curl
   - openssl
   - libtiff
   - bioconductor-org.Mm.eg.db
+  - bioconductor-org.Hs.eg.db
   - bioconductor-annotationdbi
+  - bioconductor-deseq2
   - r-curl
   - r-png
   - libpng
