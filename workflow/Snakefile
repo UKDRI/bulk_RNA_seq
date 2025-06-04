@@ -3,7 +3,7 @@ import os
 from snakemake.utils import min_version
 from snakemake.shell import shell
 
-min_version("8.8.0")
+min_version("8.25.0")
 
 # Load config
 configfile: "config/config.yaml"
