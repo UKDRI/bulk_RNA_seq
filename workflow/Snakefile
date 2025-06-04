@@ -13,13 +13,19 @@ samplesheet_df = pd.read_csv(config["sample_sheet"])
 samplesheet_df["genome"] = (
     samplesheet_df["genome"].astype(str).str.strip("\"' \t")
 )
-samples = samplesheet_df["sample_id"].tolist()
+
+# Ensure sample ID is unique as there is no concatenation step
+if samplesheet_df["sample_id"].nunique() != samplesheet_df["sample_id"].size:
+    sample_duplicates = samplesheet_df['sample_id'][samplesheet_df['sample_id'].duplicated()]
+    raise ValueError(f"Sample IDs are not unique {sample_duplicates}")
 
 # Ensure only one genome is used
 genomes = samplesheet_df["genome"].unique().tolist()
 if len(genomes) > 1:
     raise ValueError("Multiple genome types detected! Use only one genome in the sample sheet.")
 selected_genome = genomes[0]  # e.g. "hg38" or "mm39"
+if selected_genome not in ["hg38", "mm39"]:
+    raise ValueError(f"{selected_genome} not in the expected list for 'genome': 'hg38', 'mm39'")
 
 # Load comparison list from CSV
 comparisons_file = "data/comparison.csv"
