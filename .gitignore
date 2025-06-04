@@ -1,6 +1,4 @@
-.snakemake/conda/
-.snakemake/log/
-.snakemake/metadata/
+.snakemake/
 workflow/rules/._*.smk
 workflow/scripts/._*.R
 workflow/._*
@@ -11,3 +9,11 @@ workflow/._*
 __pycache__
 .DS_Store
 .smbdelete*
+results
+log.txt
+*.sif
+report.html
+results
+rawdata
+logs
+resources
