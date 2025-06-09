@@ -1,0 +1,22 @@
+Bootstrap: docker
+From: julia:1.8
+Stage: build
+
+%post
+    ATRIA_VERSION=4.1.1
+    echo "export ATRIA_VERSION=\"${ATRIA_VERSION}\"" >> $SINGULARITY_ENVIRONMENT
+    chmod +rx /root
+    apt update -y && \
+    apt upgrade -y && \
+    apt install -y wget pigz pbzip2 gcc g++ && \
+    apt-get clean && \
+    wget https://github.com/cihga39871/Atria/archive/refs/tags/v${ATRIA_VERSION}.tar.gz && \
+    tar -zxvf v${ATRIA_VERSION}.tar.gz && \
+    cd Atria-${ATRIA_VERSION} && \
+    julia build_atria.jl /app
+
+%environment
+    export PATH="/app/atria-4.1.1/bin:$PATH"
+
+%runscript
+    exec atria "$@"
