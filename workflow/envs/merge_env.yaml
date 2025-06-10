@@ -1,8 +1,0 @@
-name: merge_env
-channels:
-  - conda-forge
-  - defaults
-dependencies:
-  - python
-  - pandas
-  - openpyxl

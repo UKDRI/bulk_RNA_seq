@@ -1,9 +1,0 @@
-name: ref-env
-channels:
-  - bioconda
-  - conda-forge
-dependencies:
-  - wget  # for downloading genome and annotation files
-  - star  # for building the STAR index
-  - samtools  # for handling FASTA/GTF files
-  - python=3.8
