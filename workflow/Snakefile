@@ -1,7 +1,7 @@
+from pathlib import Path
+
 import pandas as pd
-import os
 from snakemake.utils import min_version
-from snakemake.shell import shell
 
 min_version("8.25.0")
 
@@ -19,16 +19,14 @@ if samplesheet_df["sample_id"].nunique() != samplesheet_df["sample_id"].size:
     sample_duplicates = samplesheet_df['sample_id'][samplesheet_df['sample_id'].duplicated()]
     raise ValueError(f"Sample IDs are not unique {sample_duplicates}")
 
-# Ensure only one genome is used
-genomes = samplesheet_df["genome"].unique().tolist()
-if len(genomes) > 1:
-    raise ValueError("Multiple genome types detected! Use only one genome in the sample sheet.")
-selected_genome = genomes[0]  # e.g. "hg38" or "mm39"
-if selected_genome not in ["hg38", "mm39"]:
-    raise ValueError(f"{selected_genome} not in the expected list for 'genome': 'hg38', 'mm39'")
+trim_reads = config["trim_reads"]
+selected_genome = config["selected_genome"]
+
+samples = samplesheet_df["sample_id"].tolist()
+
 
 # Load comparison list from CSV
-comparisons_file = "data/comparison.csv"
+comparisons_file = config["comparison_sheet"]
 comparisons_df = pd.read_csv(comparisons_file)
 comparisons = comparisons_df.apply(
     lambda row: f"{row['treatment']}_vs_{row['control']}",
@@ -38,9 +36,10 @@ comparisons = comparisons_df.apply(
 # Final report output
 report: "report/workflow.rst"
 
-# Always include BOTH rule sets; Snakemake will only run the rules needed
-include: "rules/download_ref_hg38.smk"
-include: "rules/download_ref_mm39.smk"
+include: "rules/common.smk"
+
+# Download the genome data
+include: "rules/download_reference_files.smk"
 
 # Additional reference-based annotation
 include: "rules/create_rseqc_annotation.smk"
@@ -48,7 +47,6 @@ include: "rules/create_rseqc_annotation.smk"
 ##################################
 # QC and Trimming
 ##################################
-include: "rules/download_atria.smk"
 include: "rules/detect_adapters.smk"
 include: "rules/fastqc_raw.smk"
 include: "rules/multiqc_raw.smk"
@@ -66,10 +64,7 @@ include: "rules/mosdepth.smk"
 include: "rules/multiqc_bam.smk"
 include: "rules/quantify_transcripts_salmon.smk"
 include: "rules/combine_expression_matrix.smk"
-include: "rules/transcript_to_gene_mapping.smk"
-include: "rules/merge_samtools_stats.smk"
 include: "rules/extract_bam_stats.smk"
-include: "rules/generate_align_pct.smk"
 include: "rules/gene_body_coverage.smk"
 include: "rules/infer_experiment.smk"
 include: "rules/read_distribution.smk"
@@ -83,44 +78,43 @@ include: "rules/deseq_analysis_comparison.smk"
 
 rule all:
     input:
-        "../results/Quant/Count/combined_expression.csv",
-        "../results/genome/hg38/hg38_canonical_transcripts.txt",
-        expand("../results/Quant/Count/quant/{sample}/quant.sf", sample=samples),
-        expand("../results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons),
-        "../results/Quant/transcript_to_gene_mapping.csv",
-        expand("../rawdata/{sample}_{suffix}.fq.gz", sample=samples, suffix=["1", "2"]),
-        expand("../results/adapters/{sample}_adapters.txt", sample=samples),
-        expand("../results/trimmed/{sample}_{suffix}.atria.fq.gz", sample=samples, suffix=["1", "2"]),
-        expand("../results/fastqc/trimmed/{sample}_{suffix}.atria_fastqc.html", sample=samples, suffix=["1", "2"]),
-        expand("../results/fastqc/raw/{sample}_{suffix}_fastqc.html", sample=samples, suffix=["1", "2"]),
-        "../results/multiqc/trimmed/multiqc_report.html",
-        "../results/multiqc/raw/multiqc_report.html",
-        "../results/multiqc/bam/multiqc_report.html",
-        expand("../results/aligned/{sample}.bam", sample=samples),
-        expand("../results/aligned/{sample}.bam.bai", sample=samples),
-        expand("../results/qc/samtools/{sample}_samtools_stats.txt", sample=samples),
-        expand("../results/qc/samtools/{sample}_flagstat.txt", sample=samples),
-        expand("../results/qc/rseqc/{sample}_infer_experiment.txt", sample=samples),
-        expand("../results/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
-        expand("../results/qc/rseqc/{sample}.geneBodyCoverage.txt", sample=samples),
-        expand("../results/qc/rseqc/{sample}.geneBodyCoverage.curves.pdf", sample=samples),
-        expand("../results/qc/rseqc/{sample}.junctionSaturation_plot.pdf", sample=samples),
-        expand("../results/qc/rseqc/{sample}.DupRate_plot.pdf", sample=samples),
-        expand("../results/qc/rseqc/{sample}.DupRate_plot.r", sample=samples),
-        expand("../results/qc/rseqc/{sample}.saturation.pdf", sample=samples),
-        expand("../results/qc/rseqc/{sample}.saturation.r", sample=samples),
-        expand("../results/qc/rseqc/{sample}.eRPKM.xls", sample=samples),
-        expand("../results/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
-        expand("../results/qc/rseqc/{sample}_bam_stat.txt", sample=samples),
-        expand("../results/qc/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
-        expand("../results/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv", comparison=comparisons),
-        expand("../results/enrichment/GO/Molecular_Function/{comparison}_molecular_function_enrichment.csv", comparison=comparisons),
-        expand("../results/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv", comparison=comparisons),
+       f"results/Quant/Count/combined_expression.csv",
+       expand("results/Quant/Count/quant/{sample}/quant.sf", sample=samples),
+       expand("results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons),
+       samplesheet_df["fastq_1"].tolist(),
+       samplesheet_df["fastq_2"].tolist(),
+       expand("results/adapters/{sample}_adapters.txt", sample=samples),
+       expand("results/trimmed/{sample}_{suffix}.atria.fastq.gz", sample=samples, suffix=["1", "2"]),
+       expand("results/fastqc/trimmed/{sample}_{suffix}.atria_fastqc.html", sample=samples, suffix=["1", "2"]),
+       expand("results/fastqc/raw/{sample}_{suffix}_fastqc.html", sample=samples, suffix=["1", "2"]),
+       f"results/multiqc/trimmed/multiqc_report.html",
+       f"results/multiqc/raw/multiqc_report.html",
+       f"results/multiqc/bam/multiqc_report.html",
+       expand("results/aligned/{sample}.bam", sample=samples),
+       expand("results/aligned/{sample}.bam.bai", sample=samples),
+       expand("results/qc/samtools/{sample}_samtools_stats.txt", sample=samples),
+       expand("results/qc/samtools/{sample}_flagstat.txt", sample=samples),
+       expand("results/qc/rseqc/{sample}_infer_experiment.txt", sample=samples),
+       expand("results/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
+       expand("results/qc/rseqc/{sample}.geneBodyCoverage.txt", sample=samples),
+       expand("results/qc/rseqc/{sample}.geneBodyCoverage.curves.pdf", sample=samples),
+       expand("results/qc/rseqc/{sample}.junctionSaturation_plot.pdf", sample=samples),
+       expand("results/qc/rseqc/{sample}.DupRate_plot.pdf", sample=samples),
+       expand("results/qc/rseqc/{sample}.DupRate_plot.r", sample=samples),
+       expand("results/qc/rseqc/{sample}.saturation.pdf", sample=samples),
+       expand("results/qc/rseqc/{sample}.saturation.r", sample=samples),
+       expand("results/qc/rseqc/{sample}.eRPKM.xls", sample=samples),
+       expand("results/qc/rseqc/{sample}_read_distribution.txt", sample=samples),
+       expand("results/qc/rseqc/{sample}_bam_stat.txt", sample=samples),
+       expand("results/qc/mosdepth/{sample}.mosdepth.summary.txt", sample=samples),
+       expand("results/enrichment/GO/Biological_Process/{comparison}_biological_process_enrichment.csv", comparison=comparisons),
+       expand("results/enrichment/GO/Molecular_Function/{comparison}_molecular_function_enrichment.csv", comparison=comparisons),
+       expand("results/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv", comparison=comparisons),
 
-        # The reference files + Salmon index for the selected genome
-        f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
-        f"../results/genome/{selected_genome}/{selected_genome}_genome.fa",
-        f"../results/genome/{selected_genome}/{selected_genome}_transcriptome.fa",
-        f"../results/genome/{selected_genome}/salmon/salmon_index_{selected_genome}",
-        f"../results/genome/{selected_genome}/{selected_genome}.bed",
-        "../results/tools/Atria/atria-4.1.1/bin/atria"
+       # The reference files + Salmon index for the selected genome
+       expand(config["genes_gtf"], selected_genome=selected_genome),
+       expand(config["genome_fasta"], selected_genome=selected_genome),
+       expand(config["cdna_fasta"], selected_genome=selected_genome),
+       f"resources/salmon_index_{selected_genome}",
+       f"resources/{selected_genome}.bed",
+       f"resources/{selected_genome}_canonical_transcripts.txt"
