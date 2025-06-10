@@ -4,6 +4,4 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - salmon  # Specify version compatible with -i option
-  - python=3.8
-  - pandas
+  - salmon=1.10.3  # Specify version compatible with -i option

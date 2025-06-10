@@ -4,8 +4,4 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - python  # Automatically resolve to compatible version
-  - pandas
-  - openpyxl
-  - tqdm
   - samtools

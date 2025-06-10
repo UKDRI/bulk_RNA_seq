@@ -11,16 +11,9 @@ dependencies:
   - r-dplyr
   - r-tidyverse
   - r-stringr
-  - r-biocmanager
-  - r-devtools
   - r-ggrepel 
-  - curl
-  - openssl
-  - libtiff
+  - r-png
   - bioconductor-org.Mm.eg.db
   - bioconductor-org.Hs.eg.db
   - bioconductor-annotationdbi
   - bioconductor-deseq2
-  - r-curl
-  - r-png
-  - libpng

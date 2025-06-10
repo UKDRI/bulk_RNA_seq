@@ -5,6 +5,3 @@ channels:
   - defaults
 dependencies:
   - fastqc=0.11.9          # Stable recent version
-  - multiqc=1.11           # Stable version
-  - pigz                   # Leave without version to pick compatible version automatically
-  - pbzip2                 # Leave without version to reduce version conflicts

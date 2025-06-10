@@ -4,37 +4,12 @@ channels:
   - bioconda
   - defaults
 dependencies:
-  - r-base
-  - r-essentials
+  - r-base=4.2.3
+  - r-optparse
   - bioconductor-clusterprofiler
-  - bioconductor-enrichplot
-  - bioconductor-go.db
-  - bioconductor-ggtree
-  - bioconductor-treeio
-  - bioconductor-biocgenerics
-  - bioconductor-s4vectors
-  - bioconductor-iranges
-  - bioconductor-genomeinfodb
-  - bioconductor-genomeinfodbdata
-  - bioconductor-annotationdbi
-  - bioconductor-biobase
-  - r-ggplot2
+  - bioconductor-org.Mm.eg.db
+  - bioconductor-org.Hs.eg.db
   - r-dplyr
-  - r-tidyr
-  - r-stringr
-  - r-scales
-  - r-data.table
   - r-readr
   - r-gprofiler2
   - r-igraph
-  - libxml2
-  - openssl
-  - zlib
-  - xz
-  - cairo
-  - libtiff
-  - fontconfig
-  - freetype
-  - libdeflate
-  - icu
-  - gfortran

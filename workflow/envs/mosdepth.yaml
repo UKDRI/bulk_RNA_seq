@@ -4,4 +4,3 @@ channels:
   - defaults
 dependencies:
   - mosdepth=0.3.3=hdfd78af_1
-prefix: /opt/anaconda3/envs/mosdepth
