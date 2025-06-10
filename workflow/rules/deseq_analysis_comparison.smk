@@ -9,14 +9,10 @@ rule deseq2_analysis_multiple:
         deg_results=expand("../results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons)
     conda:
         "../envs/deseq2_multiple_comparisons.yaml"
-    shell:
-        """
-        set -euo pipefail
-        mkdir -p ../results/data/Differential/deglist/
-        Rscript workflow/scripts/deseq2_multiple_groups.R \
-            --expression {input.expression} \
-            --metadata {input.metadata} \
-            --comparisons {input.comparisons} \
-            --canonicals {input.canonicals} \
-            --output_dir ../results/Differential/deglist/
-        """
+    params:
+        # Choose organism database based on selected genome.
+        species = "human" if config["selected_genome"] == "hg38" else "mouse",
+        out_dir = "results/Differential/deglist"
+    priority: 50
+    script:
+        "../scripts/deseq2_multiple_groups.R"

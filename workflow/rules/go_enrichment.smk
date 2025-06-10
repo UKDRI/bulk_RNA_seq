@@ -8,19 +8,7 @@ rule go_enrichment:
         cc = "../results/enrichment/GO/Cellular_Component/{comparison}_cellular_component_enrichment.csv"
     params:
         # Choose organism database based on selected genome.
-        organism = "org.Hs.eg.db" if selected_genome == "hg38" else "org.Mm.eg.db",
-        pvalue_cutoff = 0.05
-    conda:
-        "../envs/go_enrichment.yaml"
-    shell:
-        """
-        set -e
-        mkdir -p $(dirname {output.bp})
-        Rscript --vanilla workflow/scripts/go_enrichment_analysis.R \
-            -i {input.de_genes} \
-            -o_bp {output.bp} \
-            -o_mf {output.mf} \
-            -o_cc {output.cc} \
-            -org {params.organism} \
-            -p {params.pvalue_cutoff}
-        """
+        organism = "org.Hs.eg.db" if config["selected_genome"] == "hg38" else "org.Mm.eg.db",
+        pvalue_cutoff = config["go_enrichment_pvalue"]
+    script:
+        "../scripts/go_enrichment_analysis.R"

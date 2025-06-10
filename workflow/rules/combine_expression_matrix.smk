@@ -5,8 +5,7 @@ rule combine_expression_matrix:
     output:
         gene_expression_file="../results/Quant/Count/combined_expression.csv"
     conda:
-        "../envs/quant.yaml"
-    shell:
-        """
-        python workflow/scripts/combine_expression_matrix.py {input.quant_files} {output.gene_expression_file}
-        """
+        "../envs/pandas.yaml"
+    priority: 60
+    script:
+        "../scripts/combine_expression_matrix.py"
