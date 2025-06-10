@@ -1,23 +1,22 @@
 rule detect_adapters:
     input:
-        fq1="../rawdata/{sample}_1.fq.gz",
-        fq2="../rawdata/{sample}_2.fq.gz",
-        atria="../results/tools/Atria/atria-4.1.1/bin/atria"
+        fq1=lookup(query="sample_id == '{sample}'", cols="fastq_1", within=samplesheet_df),
+        fq2=lookup(query="sample_id == '{sample}'", cols="fastq_2", within=samplesheet_df)
     output:
-        adapter_txt="../results/adapters/{sample}_adapters.txt"
+        adapter_txt="results/adapters/{sample}_adapters.txt"
+    log:
+        "logs/detect_adapters_{sample}.log"
+    container:
+        config["atria_image"]
     threads: 8
-    conda:
-        "../envs/qc.yaml"
     shell:
         """
-        set -euo pipefail
-
-        # Ensure the output directory exists
         mkdir -p $(dirname {output.adapter_txt})
 
-        # Run Atria to detect adapters
-        {input.atria} -r {input.fq1} -R {input.fq2} \
-            -o $(dirname {output.adapter_txt})/temp_{wildcards.sample} --detect-adapter --threads {threads}
+        # Run Atria to detect adapters.
+        atria -r {input.fq1} -R {input.fq2} \
+            -o $(dirname {output.adapter_txt})/temp_{wildcards.sample} --detect-adapter --threads {threads} \
+            > {log} 2>&1
 
         # Locate the detected adapter summary file
         temp_file=$(find $(dirname {output.adapter_txt})/temp_{wildcards.sample}/ -type f -name "*.txt" | head -n 1)
@@ -25,10 +24,10 @@ rule detect_adapters:
         # Move the detected adapter file or create an empty one
         if [[ -n "$temp_file" && -f "$temp_file" ]]; then
             mv "$temp_file" {output.adapter_txt}
-            # Remove the temporary directory
-            rm -rf $(dirname {output.adapter_txt})/temp_{wildcards.sample}
         else
-            echo "Warning: No adapters detected for sample {wildcards.sample}. Creating an empty file."
+            echo "Warning: No adapters detected for sample {wildcards.sample}. Creating an empty file." >> {log}
             touch {output.adapter_txt}
         fi
+        # Remove the temporary directory
+        rm -rf $(dirname {output.adapter_txt})/temp_{wildcards.sample}
         """

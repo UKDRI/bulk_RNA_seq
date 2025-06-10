@@ -1,26 +1,20 @@
 rule create_rseqc_annotation:
     input:
-        gtf=f"../results/genome/{selected_genome}/{selected_genome}_annotation.gtf",
+        gtf=config["genes_gtf"],
     output:
-        bed=f"../results/genome/{selected_genome}/{selected_genome}.bed"
+        bed="resources/{selected_genome}.bed"
+    log:
+        "logs/create_rseqc_annotation_{selected_genome}.log"
     conda:
         "../envs/rseqc_env.yaml"
     shell:
         """
-        set -e  # Exit on error
-
-        # Ensure input GTF file exists
-        if [ ! -f {input.gtf} ]; then
-            echo "Error: GTF file {input.gtf} not found!" >&2
-            exit 1
-        fi
-
         # Convert GTF to genePred format
-        gtfToGenePred {input.gtf} temp_{selected_genome}.genePred
+        gtfToGenePred {input.gtf} temp_{wildcards.selected_genome}.genePred 2> {log}
 
         # Convert genePred to BED12 format
-        genePredToBed temp_{selected_genome}.genePred {output.bed}
+        genePredToBed temp_{wildcards.selected_genome}.genePred {output.bed} 2>> {log}
 
         # Clean up intermediate files
-        rm -f temp_{selected_genome}.genePred
+        rm -f temp_{wildcards.selected_genome}.genePred
         """

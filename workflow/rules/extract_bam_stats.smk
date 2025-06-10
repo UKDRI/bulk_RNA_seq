@@ -1,11 +1,14 @@
 rule extract_bam_stats:
     input:
-        bam="../results/aligned/{sample}.bam"
+        bai="results/aligned/{sample}.bam.bai",
+        bam="results/aligned/{sample}.bam"
     output:
-        stats="../results/qc/samtools/{sample}_bam_stats.txt"
+        stats="results/qc/samtools/{sample}_bam_stats.txt"
+    log:
+        "logs/extract_bam_stats_{sample}.log"
     conda:
         "../envs/samtools.yaml"
     shell:
         """
-        samtools flagstat {input.bam} > {output.stats}
+        samtools flagstat {input.bam} > {output.stats} 2> {log}
         """

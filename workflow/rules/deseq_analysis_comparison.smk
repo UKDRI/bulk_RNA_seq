@@ -1,12 +1,13 @@
 rule deseq2_analysis_multiple:
-    priority: 50
     input:
-        expression="../results/Quant/Count/combined_expression.csv",
-        metadata="data/samplesheet_full.csv",
-        canonicals="../results/genome/hg38/hg38_canonical_transcripts.txt",
-        comparisons="data/comparison.csv"
+        expression="results/Quant/Count/combined_expression.csv",
+        metadata=config["sample_sheet"],
+        canonicals=expand("resources/{selected_genome}_canonical_transcripts.txt", selected_genome=config["selected_genome"]),
+        comparisons_file=config["comparison_sheet"]
     output:
-        deg_results=expand("../results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons)
+        deg_results=expand("results/Differential/deglist/{comparison}_deg_results.csv", comparison=comparisons)
+    log:
+        "logs/deseq2_analysis_multiple.log"
     conda:
         "../envs/deseq2_multiple_comparisons.yaml"
     params:

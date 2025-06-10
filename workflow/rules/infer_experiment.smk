@@ -1,24 +1,18 @@
 rule infer_strand:
     input:
-        bam="../results/aligned/{sample}.bam",
-        annotation=lambda wildcards: f"../results/genome/{selected_genome}/{selected_genome}.bed"
+        bam="results/aligned/{sample}.bam",
+        bai="results/aligned/{sample}.bam.bai",
+        annotation=expand("resources/{selected_genome}.bed", selected_genome=config["selected_genome"])
     output:
-        txt="../results/qc/rseqc/{sample}_infer_experiment.txt"
+        txt=ensure("results/qc/rseqc/{sample}_infer_experiment.txt", non_empty=True)
+    log:
+        "logs/infer_strand_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
     shell:
         """
-        set -e  # Exit immediately if a command fails
-
-        # Ensure output directory exists
         mkdir -p $(dirname {output.txt})
 
         # Run strand inference
-        infer_experiment.py -i {input.bam} -r {input.annotation} > {output.txt} 2>&1
-
-        # Check if output was created successfully
-        if [ ! -s {output.txt} ]; then
-            echo "Error: infer_experiment.py did not generate output" >&2
-            exit 1
-        fi
+        infer_experiment.py -i {input.bam} -r {input.annotation} > {output.txt} 2> {log}
         """

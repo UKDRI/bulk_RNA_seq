@@ -1,18 +1,18 @@
 rule salmon_quant_reads:
     input:
-        r1="../results/trimmed/{sample}_1.atria.fq.gz",
-        r2="../results/trimmed/{sample}_2.atria.fq.gz",
-        index=f"../results/genome/{selected_genome}/salmon/salmon_index_{selected_genome}"
+        r1="results/trimmed/{sample}_1.atria.fastq.gz",
+        r2="results/trimmed/{sample}_2.atria.fastq.gz",
+        index=expand("resources/salmon_index_{selected_genome}", selected_genome=config["selected_genome"])
     output:
-        quant="../results/Quant/Count/quant/{sample}/quant.sf"
+        quant="results/Quant/Count/quant/{sample}/quant.sf"
     log:
-        "../results/Quant/Count/quant/{sample}/{sample}.log"
-    params:
-        libtype="A",
-        extra=""
-    threads: 50
+        "results/Quant/Count/quant/{sample}/{sample}.log"
     conda:
         "../envs/quant.yaml"
+    params:
+        libtype=config["salmon_libtype"],
+        extra=config["salmon_extra_args"]
+    threads: 50
     shell:
         """
         mkdir -p $(dirname {output.quant})

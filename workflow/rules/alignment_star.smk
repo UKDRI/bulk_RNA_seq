@@ -3,14 +3,13 @@ adjust_ulimit()
 rule alignment_star:
     """
     Align paired-end reads with STAR for a sample that includes {sample} and {genome}.
-    The genome index is computed from wildcards: "../results/genome/{genome}/star_index_{genome}.
     """
     input:
         # Trimmed FASTQs
-        r1 = "../results/trimmed/{sample}_1.atria.fq.gz",
-        r2 = "../results/trimmed/{sample}_2.atria.fq.gz",
+        r1 = "results/trimmed/{sample}_1.atria.fastq.gz",
+        r2 = "results/trimmed/{sample}_2.atria.fastq.gz",
         # Use a lambda to derive the star index path from the genome wildcard
-        star_index=f"../results/genome/{selected_genome}/star_index_{selected_genome}"
+        star_index=expand("resources/star_index_{selected_genome}", selected_genome=config["selected_genome"])
     output:
         bam = ensure("results/aligned/{sample}.bam", non_empty=True),
         log = ensure("results/aligned/{sample}_Log.out", non_empty=True),
