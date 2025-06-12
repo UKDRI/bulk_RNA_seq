@@ -19,7 +19,7 @@ rule alignment_star:
     conda:
         "../envs/align.yaml"
     params:
-        tmp_dir = get_star_tempdir(wildcards, output),
+        tmp_dir = get_star_tempdir,
         star_ram = config["star_ram_limit"] # Limit for STAR's RAM usage in bytes
     threads: 40
     shell:
