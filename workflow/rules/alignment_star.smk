@@ -9,7 +9,7 @@ rule alignment_star:
         r1 = "results/trimmed/{sample}_1.atria.fastq.gz",
         r2 = "results/trimmed/{sample}_2.atria.fastq.gz",
         # Use a lambda to derive the star index path from the genome wildcard
-        star_index=expand("resources/star_index_{selected_genome}", selected_genome=config["selected_genome"])
+        star_index=expand(config["star_index"], selected_genome=config["selected_genome"])
     output:
         bam = ensure("results/aligned/{sample}.bam", non_empty=True),
         log = ensure("results/aligned/{sample}_Log.out", non_empty=True),

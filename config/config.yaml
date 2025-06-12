@@ -30,6 +30,8 @@ do_comparison: true
 genome_fasta: "resources/{selected_genome}_genome.fa"
 genes_gtf: "resources/{selected_genome}_annotation.gtf"
 cdna_fasta: "resources/{selected_genome}_transcriptome.fa"
+star_index: "resources/star_index_{selected_genome}"
+salmon_index: "resources/salmon_index_{selected_genome}"
 
 ### These probably don't need updating
 mm39:

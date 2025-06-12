@@ -2,7 +2,7 @@ rule salmon_quant_reads:
     input:
         r1="results/trimmed/{sample}_1.atria.fastq.gz",
         r2="results/trimmed/{sample}_2.atria.fastq.gz",
-        index=expand("resources/salmon_index_{selected_genome}", selected_genome=config["selected_genome"])
+        index=expand(config["salmon_index"], selected_genome=config["selected_genome"])
     output:
         quant="results/Quant/Count/quant/{sample}/quant.sf"
     log:
