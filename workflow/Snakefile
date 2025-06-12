@@ -143,6 +143,7 @@ rule all:
        expand(config["genes_gtf"], selected_genome=selected_genome),
        expand(config["genome_fasta"], selected_genome=selected_genome),
        expand(config["cdna_fasta"], selected_genome=selected_genome),
-       f"resources/salmon_index_{selected_genome}",
+       expand(config["star_index"], selected_genome=selected_genome),
+       expand(config["salmon_index"], selected_genome=selected_genome),
        f"resources/{selected_genome}.bed",
        f"resources/{selected_genome}_canonical_transcripts.txt"

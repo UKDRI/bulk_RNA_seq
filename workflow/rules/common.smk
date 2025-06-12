@@ -18,4 +18,4 @@ def get_star_tempdir(wildcards, output):
     
 def get_deseq_output_dir(wildcards, output):
     """ Create a temporary directory name based on sample and current time """
-    return Path(output.deg_results).parent
+    return Path(output.deg_results[0]).parent
