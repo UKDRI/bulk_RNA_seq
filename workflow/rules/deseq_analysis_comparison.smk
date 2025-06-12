@@ -13,7 +13,7 @@ rule deseq2_analysis_multiple:
     params:
         # Choose organism database based on selected genome.
         species = "human" if config["selected_genome"] == "hg38" else "mouse",
-        out_dir = "results/Differential/deglist"
+        out_dir = get_deseq_output_dir
     priority: 50
     script:
         "../scripts/deseq2_multiple_groups.R"

@@ -14,3 +14,8 @@ def adjust_ulimit():
 def get_star_tempdir(wildcards, output):
     """ Create a temporary directory name based on sample and current time """
     return Path(output.bam).parent / ".".join([wildcards.sample, str(time.time())])
+
+    
+def get_deseq_output_dir(wildcards, output):
+    """ Create a temporary directory name based on sample and current time """
+    return Path(output.deg_results).parent
