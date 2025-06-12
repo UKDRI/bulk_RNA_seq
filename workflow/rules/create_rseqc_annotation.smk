@@ -1,6 +1,6 @@
 rule create_rseqc_annotation:
     input:
-        gtf=config["genes_gtf"],
+        gtf=expand(config["genes_gtf"], selected_genome=config["selected_genome"])
     output:
         bed="resources/{selected_genome}.bed"
     log:

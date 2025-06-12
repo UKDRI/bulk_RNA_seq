@@ -1,7 +1,7 @@
 # Download the primary assembly (DNA) FASTA file 
 rule download_genome:
     output:
-        config["genome_fasta"]
+        expand(config["genome_fasta"], selected_genome=config["selected_genome"])
     log:
         expand("logs/download_genome_{selected_genome}.log", selected_genome=config["selected_genome"])
     conda:
@@ -22,7 +22,7 @@ rule download_genome:
 # Download the GTF annotation file
 rule download_annotation:
     output:
-        config["genes_gtf"]
+        expand(config["genes_gtf"], selected_genome=config["selected_genome"])
     log:
         expand("logs/download_annotation_{selected_genome}.log", selected_genome=config["selected_genome"])
     conda:
@@ -43,7 +43,7 @@ rule download_annotation:
 # Download the cDNA FASTA file (transcriptome)
 rule download_transcriptome:
     output:
-        config["cdna_fasta"]
+        expand(config["cdna_fasta"], selected_genome=config["selected_genome"])
     log:
         expand("logs/download_transcriptome_{selected_genome}.log", selected_genome=config["selected_genome"])
     conda:
@@ -63,7 +63,7 @@ rule download_transcriptome:
 
 rule get_canonical_transcripts:
     input:
-        config["genes_gtf"]
+        expand(config["genes_gtf"], selected_genome=config["selected_genome"])
     output:
         "resources/{selected_genome}_canonical_transcripts.txt"
     localrule: True
@@ -79,12 +79,12 @@ rule get_canonical_transcripts:
 # (Optional) Build STAR index for alignment
 rule build_star_index:
     input:
-        genome_fa=config["genome_fasta"],
-        gtf_file=config["genes_gtf"]
+        genome_fa=expand(config["genome_fasta"], selected_genome=config["selected_genome"]),
+        gtf_file=expand(config["genes_gtf"], selected_genome=config["selected_genome"])
     output:
-        directory("resources/star_index_{selected_genome}")
+        directory(expand("resources/star_index_{selected_genome}", selected_genome=config["selected_genome"]))
     log:
-        "logs/build_star_index_{selected_genome}.log"
+        "logs/build_star_index.log"
     conda:
         "../envs/align.yaml"
     threads: 20
@@ -101,11 +101,11 @@ rule build_star_index:
 # Build Salmon index from the unzipped transcriptome
 rule build_salmon_index:
     input:
-        transcriptome = config["cdna_fasta"]
+        transcriptome = expand(config["cdna_fasta"], selected_genome=config["selected_genome"])
     output:
-        directory("resources/salmon_index_{selected_genome}")
+        directory(expand(config["salmon_index"], selected_genome=config["selected_genome"]))
     log:
-        "logs/build_salmon_index_{selected_genome}.log"
+        "logs/build_salmon_index.log"
     conda:
         "../envs/quant.yaml"
     threads: 8
