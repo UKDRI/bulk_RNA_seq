@@ -51,6 +51,55 @@ parse_args <- function() {
     return(opt)
 }
 
+# Function to convert ENSG IDs to gene symbols using bitr
+convert_ensg_to_symbols <- function(genes, organism) {
+    # If no genes are provided, return an empty data frame with the expected columns.
+    if (length(genes) == 0) return(data.frame(ENSEMBL = character(), SYMBOL = character()))
+
+    tryCatch({
+        symbol_df <- bitr(genes, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = organism)
+        if (nrow(symbol_df) == 0) stop("No gene symbols could be mapped.")
+        return(symbol_df)
+    }, error = function(e) {
+        warning("Error converting ENSG IDs to gene symbols using bitr: ", e$message)
+        return(data.frame(ENSEMBL = genes, SYMBOL = NA))
+    })
+}
+
+# Function to perform GO enrichment analysis
+perform_enrichment <- function(symbols_df, organism, ont, pvalue_cutoff) {
+    valid_genes <- na.omit(symbols_df$SYMBOL)
+    if (length(valid_genes) > 0) {
+        enrich_result <- tryCatch({
+            enrichGO(
+                gene = valid_genes,
+                OrgDb = get(organism),
+                keyType = "SYMBOL",
+                ont = ont,
+                pvalueCutoff = pvalue_cutoff
+            )
+        }, error = function(e) {
+            warning("Error during GO enrichment for ontology ", ont, ": ", e$message)
+            NULL
+        })
+
+        if (!is.null(enrich_result) && nrow(as.data.frame(enrich_result)) > 0) {
+            enrich_result_df <- as.data.frame(enrich_result)
+            # Restore gene symbols in the geneID column
+            enrich_result_df$geneID <- sapply(enrich_result_df$geneID, function(x) {
+                ids <- unlist(strsplit(x, "/"))
+                symbols <- symbols_df$SYMBOL[symbols_df$SYMBOL %in% ids]
+                paste(symbols, collapse = "/")
+            })
+            return(enrich_result_df)
+        } else {
+            return(NULL)
+        }
+    } else {
+        return(NULL)
+    }
+}
+
 go_enrichment_analysis <- function(input_file, output_bp, output_cc, output_mf, organism, pvalue_cutoff) {
     # Read DESeq2 results; if missing or empty, create an empty data frame
     de_genes <- read_csv(input_file)
@@ -75,58 +124,9 @@ go_enrichment_analysis <- function(input_file, output_bp, output_cc, output_mf, 
         filter(log2FoldChange < 0 & padj < 0.05) %>%
         pull(gene_id)
 
-    # Function to convert ENSG IDs to gene symbols using bitr
-    convert_ensg_to_symbols <- function(genes, organism) {
-        # If no genes are provided, return an empty data frame with the expected columns.
-        if (length(genes) == 0) return(data.frame(ENSEMBL = character(), SYMBOL = character()))
-
-        tryCatch({
-            symbol_df <- bitr(genes, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = organism)
-            if (nrow(symbol_df) == 0) stop("No gene symbols could be mapped.")
-            return(symbol_df)
-        }, error = function(e) {
-            warning("Error converting ENSG IDs to gene symbols using bitr: ", e$message)
-            return(data.frame(ENSEMBL = genes, SYMBOL = NA))
-        })
-    }
-
     # Convert gene IDs for both upregulated and downregulated genes
     upregulated_symbols   <- convert_ensg_to_symbols(upregulated_genes, organism)
     downregulated_symbols <- convert_ensg_to_symbols(downregulated_genes, organism)
-
-    # Function to perform GO enrichment analysis
-    perform_enrichment <- function(symbols_df, organism, ont, pvalue_cutoff) {
-        valid_genes <- na.omit(symbols_df$SYMBOL)
-        if (length(valid_genes) > 0) {
-            enrich_result <- tryCatch({
-                enrichGO(
-                    gene = valid_genes,
-                    OrgDb = get(organism),
-                    keyType = "SYMBOL",
-                    ont = ont,
-                    pvalueCutoff = pvalue_cutoff
-                )
-            }, error = function(e) {
-                warning("Error during GO enrichment for ontology ", ont, ": ", e$message)
-                NULL
-            })
-
-            if (!is.null(enrich_result) && nrow(as.data.frame(enrich_result)) > 0) {
-                enrich_result_df <- as.data.frame(enrich_result)
-                # Restore gene symbols in the geneID column
-                enrich_result_df$geneID <- sapply(enrich_result_df$geneID, function(x) {
-                    ids <- unlist(strsplit(x, "/"))
-                    symbols <- symbols_df$SYMBOL[symbols_df$SYMBOL %in% ids]
-                    paste(symbols, collapse = "/")
-                })
-                return(enrich_result_df)
-            } else {
-                return(NULL)
-            }
-        } else {
-            return(NULL)
-        }
-    }
 
     # Define the GO ontologies and corresponding output file paths
     ontologies <- c("BP", "MF", "CC")
