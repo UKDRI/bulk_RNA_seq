@@ -19,9 +19,6 @@ if samplesheet_df["sample_id"].nunique() != samplesheet_df["sample_id"].size:
     sample_duplicates = samplesheet_df['sample_id'][samplesheet_df['sample_id'].duplicated()]
     raise ValueError(f"Sample IDs are not unique {sample_duplicates}")
 
-trim_reads = config["trim_reads"]
-selected_genome = config["selected_genome"]
-
 samples = samplesheet_df["sample_id"].tolist()
 
 comparisons_file = config["comparison_sheet"]
@@ -30,17 +27,6 @@ comparisons = comparisons_df.apply(
     lambda row: f"{row['treatment']}_vs_{row['control']}",
     axis=1
 ).tolist()
-#if Path(comparisons_file).exists():
-#    comparisons_df = pd.read_csv(comparisons_file)
-#    comparisons = comparisons_df.apply(
-#        lambda row: f"{row['treatment']}_vs_{row['control']}",
-#        axis=1
-#    ).tolist()
-#else:
-#    comparisons = ["no"]
-#    deglist_path = Path(Path.cwd(), "results", "Differential", "deglist")
-#    (deglist_path / f"{comparisons[0]}_deg_results.csv").touch()
-
 
 
 # Final report output
