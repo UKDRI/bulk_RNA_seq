@@ -24,24 +24,6 @@ selected_genome = config["selected_genome"]
 
 samples = samplesheet_df["sample_id"].tolist()
 
-# This is ugly. The conditional steps seems be "1" or "2" but not "run" or "not run"
-# So once again I'm tricking Snakemake with symlinks to pretend the analysis has been
-# run.
-if not trim_reads:
-    trimmed_path = Path("trimmed").resolve()
-    trimmed_path.mkdir(parents=True, exist_ok=True)
-    for index, sample in enumerate(samples):
-        for pair in [1, 2]:
-            symlink = trimmed_path / f"{sample}_{pair}.atria.fastq.gz"
-            if not symlink.exists():
-                symlink.symlink_to(
-                    Path(samplesheet_df[f"fastq_{pair}"].iloc[index]).resolve()
-                )
-
-# Load comparison list from CSV
-# This is ugly. I am using the same trick used for trimming to have the comparison
-# run or not. But it involves a lot more files to work. In a way, it might be best
-# to have two pipelines...
 comparisons_file = config["comparison_sheet"]
 comparisons_df = pd.read_csv(comparisons_file)
 comparisons = comparisons_df.apply(
