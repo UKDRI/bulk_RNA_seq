@@ -6,7 +6,7 @@ rule salmon_quant_reads:
     output:
         quant="results/Quant/Count/quant/{sample}/quant.sf"
     log:
-        "results/Quant/Count/quant/{sample}/{sample}.log"
+        "logs/salmon_quant_reads_{sample}.log"
     conda:
         "../envs/quant.yaml"
     params:

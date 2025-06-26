@@ -5,7 +5,7 @@ rule process_genome_content:
     output:
         genome_content="results/qc/genome_content/{sample}_genome_content.txt"
     log:
-        "logs/extract_bam_stats_{sample}.log"
+        "logs/process_genome_content_{sample}.log"
     conda:
         "../envs/samtools.yaml"
     shell:
