@@ -1,0 +1,5 @@
+group,sample_id,replicate,fastq_1,fastq_2,strandedness,genome
+G1,ERR13385182,1,/home/thibaut/src/rawdata/ERR13385182_1.fastq.gz,/home/thibaut/src/rawdata/ERR13385182_2.fastq.gz,reverse,GRCm39
+G1,ERR13385183,2,/home/thibaut/src/rawdata/ERR13385183_1.fastq.gz,/home/thibaut/src/rawdata/ERR13385183_2.fastq.gz,reverse,GRCm39
+G2,ERR13385184,1,/home/thibaut/src/rawdata/ERR13385184_1.fastq.gz,/home/thibaut/src/rawdata/ERR13385184_2.fastq.gz,reverse,GRCm39
+G2,ERR13385185,2,/home/thibaut/src/rawdata/ERR13385185_1.fastq.gz,/home/thibaut/src/rawdata/ERR13385185_2.fastq.gz,reverse,GRCm39
