@@ -12,7 +12,7 @@ rule go_enrichment:
         "../envs/go_enrichment.yaml"
     params:
         # Choose organism database based on selected genome.
-        organism = "org.Hs.eg.db" if config["selected_genome"] == "hg38" else "org.Mm.eg.db",
+        organism = "org.Hs.eg.db" if config["selected_genome"] == "GRCh38" else "org.Mm.eg.db",
         pvalue_cutoff = config["go_enrichment_pvalue"]
     script:
         "../scripts/go_enrichment_analysis.R"

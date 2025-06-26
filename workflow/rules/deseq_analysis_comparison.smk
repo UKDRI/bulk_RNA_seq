@@ -12,7 +12,7 @@ rule deseq2_analysis_multiple:
         "../envs/deseq2_multiple_comparisons.yaml"
     params:
         # Choose organism database based on selected genome.
-        species = "human" if config["selected_genome"] == "hg38" else "mouse",
+        species = "human" if config["selected_genome"] == "GRCh38" else "mouse",
         out_dir = get_deseq_output_dir
     priority: 50
     script:

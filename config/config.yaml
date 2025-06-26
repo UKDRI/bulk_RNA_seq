@@ -6,8 +6,8 @@ sample_sheet: "data/samplesheet.csv"
 # Path to the CSV file containing the comparisons to do. You must use an absolute
 # path if you are using --directory
 comparison_sheet: "data/comparison.csv"
-# This should be mm39 or hg38
-selected_genome: "mm39"
+# This should be GRCm39 or GRCh38
+selected_genome: "GRCm39"
 
 ### Parameters to update if you are not running the pipeline from the 
 ### repository or if you are using --directory.
@@ -34,15 +34,13 @@ star_index: "resources/star_index_{selected_genome}"
 salmon_index: "resources/salmon_index_{selected_genome}"
 
 ### These probably don't need updating
-mm39:
+GRCm39:
   species_name: "mus_musculus"
   species_name_upper: "Mus_musculus"
-  genome_version: "GRCm39"
   release_version: 113
-hg38:
+GRCh38:
   species_name: "homo_sapiens"
   species_name_upper: "Homo_sapiens"
-  genome_version: "GRCh38"
   release_version: 113
 
 go_enrichment_pvalue: 0.05

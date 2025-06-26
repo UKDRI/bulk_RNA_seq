@@ -10,7 +10,7 @@ rule download_genome:
         release_version = config[config["selected_genome"]]["release_version"],
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
-        genome_version = config[config["selected_genome"]]["genome_version"]
+        genome_version = config["selected_genome"]
     shell:
         """
         mkdir -p $(dirname {output})
@@ -31,7 +31,7 @@ rule download_annotation:
         release_version = config[config["selected_genome"]]["release_version"],
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
-        genome_version = config[config["selected_genome"]]["genome_version"]
+        genome_version = config["selected_genome"]
     shell:
         """
         mkdir -p $(dirname {output})
@@ -52,7 +52,7 @@ rule download_transcriptome:
         release_version = config[config["selected_genome"]]["release_version"],
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
-        genome_version = config[config["selected_genome"]]["genome_version"]
+        genome_version = config["selected_genome"]
     shell:
         """
         mkdir -p $(dirname {output})
