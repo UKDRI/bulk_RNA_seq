@@ -10,7 +10,7 @@ if (is.object(snakemake)) {
 }
 
 # Define necessary packages
-required_packages <- c("clusterProfiler", "gprofiler2", "org.Hs.eg.db", "org.Mm.eg.db", "dplyr", "readr", "igraph", "optparse")
+required_packages <- c("clusterProfiler", "org.Hs.eg.db", "org.Mm.eg.db", "dplyr", "readr", "igraph", "optparse")
 
 install_libraries <- function(packages) {
     # Load or install necessary packages

@@ -11,5 +11,4 @@ dependencies:
   - bioconductor-org.Hs.eg.db
   - r-dplyr
   - r-readr
-  - r-gprofiler2
   - r-igraph
