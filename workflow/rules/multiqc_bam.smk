@@ -18,6 +18,10 @@ rule run_multiqc:
     conda:
         "../envs/multiqc.yaml"
     priority: 30
+    threads: 1
+    resources:
+        mem_gb = 1
+        runtime_m = 10
     shell:
         """
         # Ensure the output directory exists

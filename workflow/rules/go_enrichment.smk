@@ -14,5 +14,9 @@ rule go_enrichment:
         # Choose organism database based on selected genome.
         organism = "org.Hs.eg.db" if config["selected_genome"] == "GRCh38" else "org.Mm.eg.db",
         pvalue_cutoff = config["go_enrichment_pvalue"]
+    threads: 1
+    resources:
+        mem_gb = 2
+        runtime_m = 10
     script:
         "../scripts/go_enrichment_analysis.R"

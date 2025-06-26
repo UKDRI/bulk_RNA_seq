@@ -8,6 +8,10 @@ rule process_genome_content:
         "logs/process_genome_content_{sample}.log"
     conda:
         "../envs/samtools.yaml"
+    threads: 1
+    resources:
+        mem_gb = 1
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.genome_content})

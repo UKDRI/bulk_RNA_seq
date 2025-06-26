@@ -13,6 +13,9 @@ rule salmon_quant_reads:
         libtype=config["salmon_libtype"],
         extra=config["salmon_extra_args"]
     threads: 50
+    resources:
+        mem_gb = 1
+        runtime_h = 1
     shell:
         """
         mkdir -p $(dirname {output.quant})

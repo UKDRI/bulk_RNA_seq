@@ -13,6 +13,9 @@ rule detect_adapters:
     params:
         do_trimming = config["trim_reads"]
     threads: 8
+    resources:
+        mem_gb = 2
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.adapter_txt})

@@ -15,5 +15,9 @@ rule deseq2_analysis_multiple:
         species = "human" if config["selected_genome"] == "GRCh38" else "mouse",
         out_dir = get_deseq_output_dir
     priority: 50
+    threads: 1
+    resources:
+        mem_gb = 2
+        runtime_m = 10
     script:
         "../scripts/deseq2_multiple_groups.R"

@@ -11,6 +11,10 @@ rule download_genome:
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
         genome_version = config["selected_genome"]
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output})
@@ -32,6 +36,10 @@ rule download_annotation:
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
         genome_version = config["selected_genome"]
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output})
@@ -53,6 +61,10 @@ rule download_transcriptome:
         species_name = config[config["selected_genome"]]["species_name"],
         species_name_upper = config[config["selected_genome"]]["species_name_upper"],
         genome_version = config["selected_genome"]
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output})
@@ -71,6 +83,10 @@ rule get_canonical_transcripts:
         "logs/get_canonical_transcripts_{selected_genome}.log"
     conda:
         "../envs/fetch.yaml"
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         grep Ensembl_canonical {input} | cut -d ';' -f3 | cut -d '"' -f2 | sort -u > {output} 2> {log}
@@ -88,6 +104,9 @@ rule build_star_index:
     conda:
         "../envs/align.yaml"
     threads: 20
+    resources:
+        mem_gb = 33
+        runtime_h = 3
     shell:
         """
         mkdir -p {output}
@@ -109,6 +128,9 @@ rule build_salmon_index:
     conda:
         "../envs/quant.yaml"
     threads: 8
+    resources:
+        mem_gb = 1
+        runtime_m = 10
     shell:
         """
         mkdir -p {output}

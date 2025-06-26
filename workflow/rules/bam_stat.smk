@@ -9,6 +9,10 @@ rule bam_stat:
         "logs/bam_stat_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         # Create the output directory if it doesn't exist

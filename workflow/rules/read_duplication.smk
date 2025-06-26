@@ -11,6 +11,10 @@ rule read_duplication:
         "logs/read_duplication_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 15
+        runtime_m = 30
     shell:
         """
         # Create the output directory if it doesn't exist

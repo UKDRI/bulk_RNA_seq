@@ -21,7 +21,10 @@ rule alignment_star:
     params:
         tmp_dir = get_star_tempdir,
         star_ram = config["star_ram_limit"] # Limit for STAR's RAM usage in bytes
-    threads: 40
+    threads: 10
+    resources:
+        mem_gb = config["star_ram_limit"] / 1000000000
+        runtime_h = 1
     shell:
         """
         STAR \

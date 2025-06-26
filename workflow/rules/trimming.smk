@@ -15,6 +15,9 @@ rule trimming:
     params:
         do_trimming = config["trim_reads"]
     threads: 8
+    resources:
+        mem_gb = 2
+        runtime_m = 10
     shell:
         """
         # Ensure the output directory exists.

@@ -9,6 +9,10 @@ rule read_distribution:
         "logs/read_distribution_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 2
+        runtime_m = 30
     shell:
         """
         # Ensure output directory exists

@@ -8,5 +8,9 @@ rule combine_expression_matrix:
     conda:
         "../envs/pandas.yaml"
     priority: 60
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     script:
         "../scripts/combine_expression_matrix.py"

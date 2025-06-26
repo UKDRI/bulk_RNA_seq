@@ -12,6 +12,10 @@ rule rpkm_saturation:
         "logs/rpkm_saturation_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 34
+        runtime_h = 2
     shell:
         """
         # Ensure output directory exists

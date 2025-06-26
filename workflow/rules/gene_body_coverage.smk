@@ -10,6 +10,10 @@ rule gene_body_coverage:
         "logs/gene_body_coverage_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 2
+        runtime_h = 1
     shell:
         """
         mkdir -p $(dirname {output.pdf})

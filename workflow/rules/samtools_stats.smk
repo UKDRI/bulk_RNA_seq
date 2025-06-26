@@ -9,6 +9,10 @@ rule samtools_stats:
         "logs/samtools_stats_{sample}.log"
     conda:
         "../envs/samtools.yaml"
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.stats})

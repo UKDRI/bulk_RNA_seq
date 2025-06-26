@@ -10,6 +10,10 @@ rule junction_saturation:
         "logs/junction_saturation_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 2
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.pdf})

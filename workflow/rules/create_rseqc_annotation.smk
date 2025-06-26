@@ -7,6 +7,10 @@ rule create_rseqc_annotation:
         "logs/create_rseqc_annotation_{selected_genome}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_mb = 500
+        runtime_m = 10
     shell:
         """
         # Convert GTF to genePred format

@@ -9,6 +9,10 @@ rule infer_strand:
         "logs/infer_strand_{sample}.log"
     conda:
         "../envs/rseqc_env.yaml"
+    threads: 1
+    resources:
+        mem_gb = 1
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.txt})

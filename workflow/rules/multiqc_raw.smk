@@ -8,6 +8,10 @@ rule multiqc_raw:
         "logs/multiqc_raw.log"
     conda:
         "../envs/multiqc.yaml"
+    threads: 1
+    resources:
+        mem_gb = 1
+        runtime_m = 10
     shell:
         """
         mkdir -p $(dirname {output.html})

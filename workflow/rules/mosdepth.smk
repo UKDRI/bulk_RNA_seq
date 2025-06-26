@@ -8,11 +8,15 @@ rule mosdepth:
         "logs/mosdepth_{sample}.log"
     conda:
         "../envs/mosdepth.yaml"
+    threads: 10
+    resources:
+        mem_gb = 1
+        runtime_h = 1
     shell:
         """
         # Create the output directory
         mkdir -p $(dirname {output.summary})
 
         # Run mosdepth with specified parameters
-        mosdepth --threads 10 --fast-mode $(dirname {output.summary})/{wildcards.sample} {input.bam} > {log}
+        mosdepth --threads {threads} --fast-mode $(dirname {output.summary})/{wildcards.sample} {input.bam} > {log}
         """
