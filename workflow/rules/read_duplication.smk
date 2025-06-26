@@ -13,7 +13,7 @@ rule read_duplication:
         "../envs/rseqc_env.yaml"
     threads: 1
     resources:
-        mem_gb = 15
+        mem_gb = 15,
         runtime_m = 30
     shell:
         """

@@ -13,7 +13,7 @@ rule download_genome:
         genome_version = config["selected_genome"]
     threads: 1
     resources:
-        mem_mb = 500
+        mem_mb = 500,
         runtime_m = 10
     shell:
         """
@@ -38,7 +38,7 @@ rule download_annotation:
         genome_version = config["selected_genome"]
     threads: 1
     resources:
-        mem_mb = 500
+        mem_mb = 500,
         runtime_m = 10
     shell:
         """
@@ -63,7 +63,7 @@ rule download_transcriptome:
         genome_version = config["selected_genome"]
     threads: 1
     resources:
-        mem_mb = 500
+        mem_mb = 500,
         runtime_m = 10
     shell:
         """
@@ -85,7 +85,7 @@ rule get_canonical_transcripts:
         "../envs/fetch.yaml"
     threads: 1
     resources:
-        mem_mb = 500
+        mem_mb = 500,
         runtime_m = 10
     shell:
         """
@@ -105,7 +105,7 @@ rule build_star_index:
         "../envs/align.yaml"
     threads: 20
     resources:
-        mem_gb = 33
+        mem_gb = 33,
         runtime_h = 3
     shell:
         """
@@ -129,7 +129,7 @@ rule build_salmon_index:
         "../envs/quant.yaml"
     threads: 8
     resources:
-        mem_gb = 1
+        mem_gb = 1,
         runtime_m = 10
     shell:
         """

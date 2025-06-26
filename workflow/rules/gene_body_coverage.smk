@@ -12,7 +12,7 @@ rule gene_body_coverage:
         "../envs/rseqc_env.yaml"
     threads: 1
     resources:
-        mem_gb = 2
+        mem_gb = 2,
         runtime_h = 1
     shell:
         """

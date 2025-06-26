@@ -13,7 +13,7 @@ rule fastqc_raw:
         "../envs/qc.yaml"
     threads: 2
     resources:
-        mem_gb = 1
+        mem_gb = 1,
         runtime_m = 10
     shell:
         """

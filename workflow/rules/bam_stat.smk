@@ -11,7 +11,7 @@ rule bam_stat:
         "../envs/rseqc_env.yaml"
     threads: 1
     resources:
-        mem_mb = 500
+        mem_mb = 500,
         runtime_m = 10
     shell:
         """

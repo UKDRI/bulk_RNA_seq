@@ -17,7 +17,7 @@ rule deseq2_analysis_multiple:
     priority: 50
     threads: 1
     resources:
-        mem_gb = 2
+        mem_gb = 2,
         runtime_m = 10
     script:
         "../scripts/deseq2_multiple_groups.R"

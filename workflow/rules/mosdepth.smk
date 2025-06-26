@@ -10,7 +10,7 @@ rule mosdepth:
         "../envs/mosdepth.yaml"
     threads: 10
     resources:
-        mem_gb = 1
+        mem_gb = 1,
         runtime_h = 1
     shell:
         """

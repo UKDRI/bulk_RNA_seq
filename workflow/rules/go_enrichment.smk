@@ -16,7 +16,7 @@ rule go_enrichment:
         pvalue_cutoff = config["go_enrichment_pvalue"]
     threads: 1
     resources:
-        mem_gb = 2
+        mem_gb = 2,
         runtime_m = 10
     script:
         "../scripts/go_enrichment_analysis.R"

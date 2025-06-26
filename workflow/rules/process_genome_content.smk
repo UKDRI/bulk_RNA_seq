@@ -10,7 +10,7 @@ rule process_genome_content:
         "../envs/samtools.yaml"
     threads: 1
     resources:
-        mem_gb = 1
+        mem_gb = 1,
         runtime_m = 10
     shell:
         """

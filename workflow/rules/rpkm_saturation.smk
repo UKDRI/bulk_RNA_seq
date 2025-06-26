@@ -14,7 +14,7 @@ rule rpkm_saturation:
         "../envs/rseqc_env.yaml"
     threads: 1
     resources:
-        mem_gb = 34
+        mem_gb = 34,
         runtime_h = 2
     shell:
         """

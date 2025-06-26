@@ -9,7 +9,7 @@ rule index_bam:
         "../envs/samtools.yaml"
     threads: 1
     resources:
-        mem_gb = 1
+        mem_gb = 1,
         runtime_m = 10
     shell:
         """

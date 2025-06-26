@@ -12,7 +12,7 @@ rule junction_saturation:
         "../envs/rseqc_env.yaml"
     threads: 1
     resources:
-        mem_gb = 2
+        mem_gb = 2,
         runtime_m = 10
     shell:
         """
