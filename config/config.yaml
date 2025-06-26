@@ -16,7 +16,6 @@ atria_image: "atria/atria-4.1.1.sif"
 
 ### Parameters dependant on your machine/HPC
 # Number of threads to use for parallel processes
-threads: 20
 star_ram_limit: 40000000000
 
 ### Parameters to skip section of the pipeline
