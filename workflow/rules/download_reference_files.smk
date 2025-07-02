@@ -87,10 +87,8 @@ rule get_canonical_transcripts:
     resources:
         mem_mb = 500,
         runtime_m = 10
-    shell:
-        """
-        grep Ensembl_canonical {input} | cut -d ';' -f3 | cut -d '"' -f2 | sort -u > {output} 2> {log}
-        """
+    script:
+        "../scripts/get_canonical_ids.py"
 
 # (Optional) Build STAR index for alignment
 rule build_star_index:

@@ -55,34 +55,36 @@ deseq2_multiple_groups <- function(expression, metadata, comparisons, canonicals
     counts <- fread(expression, data.table = FALSE)
     metadata <- fread(metadata, data.table = FALSE)
     comparisons <- fread(comparisons, data.table = FALSE)
-    canonical_transcript_ids <- fread(canonicals, data.table = FALSE, col.names=c("transcript_id"), quote="")
+    canonical_transcript_ids <- fread(canonicals, data.table = FALSE, col.names=c("gene_id", "transcript_id"), quote="")
 
     # Ensure consistent samples
-    colnames(counts)[1] <- "gene_id"
+    colnames(counts)[1] <- "transcript_id"
     sample_ids <- intersect(colnames(counts)[-1], metadata$sample_id)
     if (length(sample_ids) < 2) stop("Error: Not enough matching samples between counts and metadata.")
     cat("Matching sample IDs:", paste(sample_ids, collapse = ", "), "\n")
 
     # Removing the version of the transcript if present
-    counts$unversioned_id <- sapply(strsplit(counts$gene_id,"\\."), `[`, 1)
+    counts$unversioned_id <- sapply(strsplit(counts$transcript_id,"\\."), `[`, 1)
     # Keeping only the canonical transcripts
     counts <- counts[counts$unversioned_id %in% canonical_transcript_ids$transcript_id,]
+    mapping_transcript_gene <- setNames(canonical_transcript_ids$gene_id, canonical_transcript_ids$transcript_id)
+    counts$gene_id <- mapping_transcript_gene[counts$unversioned_id]
 
     # Map Ensembl IDs to Gene Names
     if (species == "human") {
         gene_names <- AnnotationDbi::mapIds(
             org.Hs.eg.db,
-            keys = counts$unversioned_id,
+            keys = counts$gene_id,
             column = "SYMBOL",
-            keytype = "ENSEMBLTRANS",
+            keytype = "ENSEMBL",
             multiVals = "first"
         )
     } else {
         gene_names <- AnnotationDbi::mapIds(
             org.Mm.eg.db,
-            keys = counts$unversioned_id,
+            keys = counts$gene_id,
             column = "SYMBOL",
-            keytype = "ENSEMBLTRANS",
+            keytype = "ENSEMBL",
             multiVals = "first"
         )
     }
