@@ -82,7 +82,7 @@ rule get_canonical_transcripts:
     log:
         "logs/get_canonical_transcripts_{selected_genome}.log"
     conda:
-        "../envs/fetch.yaml"
+        "../envs/pandas.yaml"
     threads: 1
     resources:
         mem_mb = 500,
