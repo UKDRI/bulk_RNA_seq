@@ -10,15 +10,13 @@ configfile: "config/config.yaml"
 
 # Load sample sheet
 samplesheet_df = pd.read_csv(config["sample_sheet"])
-samplesheet_df["genome"] = (
-    samplesheet_df["genome"].astype(str).str.strip("\"' \t")
-)
 
 # Ensure sample ID is unique as there is no concatenation step
 if samplesheet_df["sample_id"].nunique() != samplesheet_df["sample_id"].size:
     sample_duplicates = samplesheet_df['sample_id'][samplesheet_df['sample_id'].duplicated()]
     raise ValueError(f"Sample IDs are not unique {sample_duplicates}")
 
+# Needed for analyses creating a summary from the samples such as multiqc_raw
 samples = samplesheet_df["sample_id"].tolist()
 
 comparisons_file = config["comparison_sheet"]
