@@ -54,7 +54,10 @@ parse_args <- function() {
 # Function to convert ENSG IDs to gene symbols using bitr
 convert_ensg_to_symbols <- function(genes, organism) {
     # If no genes are provided, return an empty data frame with the expected columns.
-    if (length(genes) == 0) return(data.frame(ENSEMBL = character(), SYMBOL = character()))
+    if (length(genes) == 0) {
+        warning("No genes provided")
+        return(data.frame(ENSEMBL = character(), SYMBOL = character()))
+    }
 
     tryCatch({
         symbol_df <- bitr(genes, fromType = "ENSEMBL", toType = "SYMBOL", OrgDb = organism)
